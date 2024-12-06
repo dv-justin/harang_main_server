@@ -2,9 +2,25 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './modules/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import { TieModule } from './modules/tie.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
+    }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      global: true,
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN') },
+      }),
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'database-1-harang.c9o4eyoiwaus.ap-northeast-2.rds.amazonaws.com',
@@ -16,6 +32,8 @@ import { UserModule } from './modules/user.module';
       synchronize: false,
     }),
     UserModule,
+    AuthModule,
+    TieModule,
   ],
   controllers: [AppController],
   providers: [],
