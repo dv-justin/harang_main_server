@@ -7,17 +7,10 @@ import { ResponseGenerateTokensDto } from './dtos/response/response-generate-tok
 export class AuthService implements AuthServicePort {
   constructor(private jwtService: JwtService) {}
 
-  async generateTokens(user_id: string): Promise<ResponseGenerateTokensDto> {
-    const access_token = await this.jwtService.signAsync(
-      { user_id },
-      { expiresIn: '1h' },
-    );
+  async generateTokens(user_id: number): Promise<ResponseGenerateTokensDto> {
+    const access_token = await this.jwtService.signAsync({ user_id });
 
-    const refresh_token = await this.jwtService.signAsync(
-      { user_id },
-      { expiresIn: '7d' },
-    );
-
+    const refresh_token = await this.jwtService.signAsync({ user_id });
     return { access_token, refresh_token };
   }
 }
