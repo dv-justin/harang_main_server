@@ -33,11 +33,14 @@ export class UserMatchMeetingEntity {
   @Column({ type: 'tinyint' })
   meeting_status: number;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'tinyint' })
   man_user_ticket_used: number;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'tinyint' })
   female_user_ticket_used: number;
+
+  @Column({ type: 'tinyint' })
+  is_failed: number;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
