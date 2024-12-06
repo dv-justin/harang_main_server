@@ -6,9 +6,10 @@ import { UserEntity } from 'src/applications/domain/entities/user.entity';
 import { UserServicePort } from 'src/applications/port/in-bound/user.service.port';
 import { UserRepositoryPort } from 'src/applications/port/out-bound/user.repository.port';
 import { UserService } from 'src/applications/use-case/user.service';
+import { AuthModule } from './auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
+  imports: [AuthModule, TypeOrmModule.forFeature([UserEntity])],
   controllers: [UserController],
   providers: [
     {
@@ -20,6 +21,11 @@ import { UserService } from 'src/applications/use-case/user.service';
       useClass: UserRepository,
     },
   ],
-  exports: [],
+  exports: [
+    {
+      provide: UserServicePort,
+      useClass: UserService,
+    },
+  ],
 })
 export class UserModule {}
