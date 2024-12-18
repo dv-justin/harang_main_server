@@ -4,9 +4,9 @@ import { UserEntity } from 'src/applications/domain/entities/user.entity';
 import { UserInterface } from 'src/applications/port/out-bound/interfaces/user';
 import { UserRepositoryPort } from 'src/applications/port/out-bound/user.repository.port';
 import { Repository } from 'typeorm';
-import { ResponseFindByPhoneNumberDto } from './dtos/response/response-find-one-by-phone-number.dto';
+import { ResponseFindByPhoneNumberDto } from './dtos/responses/response-find-one-by-phone-number.dto';
 import { plainToInstance } from 'class-transformer';
-import { ResponseFindOneByUserIdDto } from './dtos/response/response-find-one-user-id.dto';
+import { ResponseFindOneByUserIdDto } from './dtos/responses/response-find-one-user-id.dto';
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {
@@ -22,7 +22,23 @@ export class UserRepository implements UserRepositoryPort {
       },
       select: {
         id: true,
+        name: true,
+        birthdate: true,
         gender: true,
+        phone_number: true,
+        region_level1: true,
+        region_level2: true,
+        church_name: true,
+        pastor_name: true,
+        school_and_major: true,
+        company_name: true,
+        your_faith: true,
+        influential_verse: true,
+        prayer_topic: true,
+        vision: true,
+        couple_activity: true,
+        expected_meeting: true,
+        merit: true,
       },
     });
 

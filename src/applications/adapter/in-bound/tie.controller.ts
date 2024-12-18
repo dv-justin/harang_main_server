@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseFilters, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -8,8 +8,8 @@ import {
 import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
 import { TieServicePort } from 'src/applications/port/in-bound/tie.service.port';
+import { JwtExceptionFilter } from 'src/filters/jwt-exception.filter';
 import { ResponseGetTieDto } from './dtos/responses/response-get-tie.dto';
-import { cpSync } from 'fs';
 
 @ApiTags('ties')
 @Controller('ties')
@@ -18,6 +18,7 @@ export class TieController {
   constructor(private readonly tieServicePort: TieServicePort) {}
 
   @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
   @Get()
   @ApiOperation({
     summary: '인연 조회 api',
