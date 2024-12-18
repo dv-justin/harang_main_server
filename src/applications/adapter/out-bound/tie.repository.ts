@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import { TieRepositoryPort } from 'src/applications/port/out-bound/tie.repository.port';
 import { UserMatchMeetingEntity } from 'src/applications/domain/entities/user-match-meeting.entity';
-import { ResponseFindByTieDto } from './dtos/response/response-find-by-tie.dto';
+import { ResponseFindByTieDto } from './dtos/responses/response-find-by-tie.dto';
 
 @Injectable()
 export class TieRepository implements TieRepositoryPort {
@@ -29,9 +29,13 @@ export class TieRepository implements TieRepositoryPort {
       select: {
         man_user: {
           id: true,
+          name: true,
+          gender: true,
         },
         female_user: {
           id: true,
+          name: true,
+          gender: true,
         },
       },
     });

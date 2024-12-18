@@ -1,4 +1,4 @@
-import { ResponseFindByPhoneNumberDto } from 'src/applications/adapter/out-bound/dtos/response/response-find-one-by-phone-number.dto';
+import { ResponseFindByPhoneNumberDto } from 'src/applications/adapter/out-bound/dtos/responses/response-find-one-by-phone-number.dto';
 import { UserInterface } from './interfaces/user';
 
 export abstract class UserRepositoryPort {

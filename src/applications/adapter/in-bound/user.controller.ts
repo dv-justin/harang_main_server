@@ -1,50 +1,40 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RequestSaveUserDto } from './dtos/requests/request-save-user.dto';
+import { Controller, Get, Param, UseFilters, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserServicePort } from 'src/applications/port/in-bound/user.service.port';
-import { ResponseGetUserPhoneNumberDto } from './dtos/responses/response-get-user-phone-number.dto';
+import { ResponseGetUserIdDto } from './dtos/responses/reponse-get-user-id.dto';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { JwtExceptionFilter } from 'src/filters/jwt-exception.filter';
 
 @ApiTags('users')
 @Controller('users')
+@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userServicePort: UserServicePort) {}
 
-  @Get('/phone-number/:phone_number')
+  @Get('/:user_id')
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
   @ApiOperation({
-    summary: '회원 휴대폰 번호 조회 api',
-    description: '회원 휴대폰 번호 조회 api',
+    summary: '회원 user_id 조회 api',
+    description: '회원 user_id 조회 api',
   })
   @ApiResponse({
     status: 200,
     description: '성공',
-    type: ResponseGetUserPhoneNumberDto,
+    type: ResponseGetUserIdDto,
   })
   @ApiResponse({
     status: 400,
     description: '실패(잘못된 요청)',
   })
-  async getUserPhoneNumber(
-    @Param('phone_number') phone_number: string,
-  ): Promise<ResponseGetUserPhoneNumberDto> {
-    const user = await this.userServicePort.getUserPhoneNumber(phone_number);
-
-    return user;
-  }
-
-  @Post()
-  @ApiOperation({
-    summary: '회원 생성 api',
-    description: '회원을 생성하는 api',
-  })
-  @ApiResponse({
-    status: 201,
-    description: '성공',
-  })
-  @ApiResponse({
-    status: 400,
-    description: '실패(잘못된 요청)',
-  })
-  async saveUser(@Body() dto: RequestSaveUserDto): Promise<void> {
-    await this.userServicePort.saveUser(dto);
+  async getUserId(
+    @Param('user_id') user_id: number,
+  ): Promise<ResponseGetUserIdDto> {
+    return await this.userServicePort.getUserId(user_id);
   }
 }
