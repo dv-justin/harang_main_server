@@ -3,8 +3,11 @@ import { RequestSaveUserDto } from 'src/applications/adapter/in-bound/dtos/reque
 import { UserServicePort } from '../port/in-bound/user.service.port';
 import { UserRepositoryPort } from '../port/out-bound/user.repository.port';
 import { AuthServicePort } from '../port/in-bound/auth.service.port';
-import { ResponseGetUserIdDto } from './dtos/responses/reponse-get-user-id.dto';
+import { ResponseGetUserIdDto } from './dtos/responses/response-get-user-id.dto';
 import { ResponseGetUserPhoneNumberDto } from './dtos/responses/response-get-user-phone-number.dto';
+import { ResponseGetUserIdTokenDto } from './dtos/responses/reponse-get-user-id-token.dto';
+import { RequestUpdateUserDto } from '../adapter/in-bound/dtos/requests/request-update-user.dto';
+import { UserStatus } from '../domain/enums/user-status.enum';
 
 @Injectable()
 export class UserService implements UserServicePort {
@@ -58,6 +61,52 @@ export class UserService implements UserServicePort {
     };
   }
 
+  async getUserIdToken(user_id: number): Promise<ResponseGetUserIdTokenDto> {
+    const {
+      id: id,
+      status: status,
+      name: name,
+      gender: gender,
+      birthdate: birthdate,
+      phone_number: phoneNumber,
+      region_level1: regionLevel1,
+      region_level2: regionLevel2,
+      church_name: churchName,
+      pastor_name: pastorName,
+      school_and_major: schoolAndMajor,
+      company_name: companyName,
+      your_faith: yourFaith,
+      influential_verse: influentialVerse,
+      prayer_topic: prayerTopic,
+      vision: vision,
+      couple_activity: coupleActivity,
+      expected_meeting: expectedMeeting,
+      merit: merit,
+    } = await this.userRepositoryPort.findOneUserId(user_id);
+
+    return {
+      id,
+      status,
+      name,
+      gender,
+      birthdate,
+      phoneNumber,
+      regionLevel1,
+      regionLevel2,
+      churchName,
+      pastorName,
+      schoolAndMajor,
+      companyName,
+      yourFaith,
+      influentialVerse,
+      prayerTopic,
+      vision,
+      coupleActivity,
+      expectedMeeting,
+      merit,
+    };
+  }
+
   async getUserPhoneNumber(
     phone_number: string,
   ): Promise<ResponseGetUserPhoneNumberDto> {
@@ -81,5 +130,49 @@ export class UserService implements UserServicePort {
     }
 
     await this.userRepositoryPort.save(save_user);
+  }
+
+  async updateUser(user_id: number, dto: RequestUpdateUserDto): Promise<void> {
+    const {
+      name,
+      gender,
+      birthdate,
+      phone_number,
+      region_level1,
+      region_level2,
+      church_name,
+      pastor_name,
+      school_and_major,
+      company_name,
+      your_faith,
+      influential_verse,
+      prayer_topic,
+      vision,
+      couple_activity,
+      expected_meeting,
+      merit,
+    } = dto;
+
+    const user = {
+      id: user_id,
+      name,
+      gender,
+      birthdate,
+      phone_number,
+      region_level1,
+      region_level2,
+      church_name,
+      pastor_name,
+      school_and_major,
+      company_name,
+      your_faith,
+      influential_verse,
+      prayer_topic,
+      vision,
+      couple_activity,
+      expected_meeting,
+      merit,
+    };
+    await this.userRepositoryPort.save({ ...user, status: UserStatus.PENDING });
   }
 }

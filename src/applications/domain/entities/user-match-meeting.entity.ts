@@ -27,9 +27,6 @@ export class UserMatchMeetingEntity {
   @JoinColumn({ name: 'female_user_id' })
   female_user: UserEntity;
 
-  @Column({ type: 'date' })
-  meeting_date: string;
-
   @Column({ type: 'tinyint' })
   meeting_status: number;
 
@@ -41,6 +38,15 @@ export class UserMatchMeetingEntity {
 
   @Column({ type: 'tinyint' })
   is_failed: number;
+
+  @Column({ length: 255, default: null })
+  meeting_location: string;
+
+  @Column({ length: 255, default: null })
+  meeting_address: string;
+
+  @Column({ length: 255, default: null })
+  meeting_schedule: string;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

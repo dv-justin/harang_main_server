@@ -16,12 +16,4 @@ export class ResponseGetTieDto {
   @IsBoolean()
   @IsNotEmpty()
   isMyTicket: boolean;
-
-  @IsBoolean()
-  @IsNotEmpty()
-  isOpponentTicket: boolean;
-
-  @IsBoolean()
-  @IsNotEmpty()
-  isFailed: boolean;
 }

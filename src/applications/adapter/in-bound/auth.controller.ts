@@ -3,7 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthServicePort } from 'src/applications/port/in-bound/auth.service.port';
 import { UserServicePort } from 'src/applications/port/in-bound/user.service.port';
 import { RequestSaveUserDto } from './dtos/requests/request-save-user.dto';
-import { ResponseLoginDto } from './dtos/responses/reponse-login.dto';
+import { ResponseLoginDto } from './dtos/responses/response-login.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -30,7 +30,7 @@ export class AuthController {
   async login(
     @Param('phone_number') phone_number: string,
   ): Promise<ResponseLoginDto> {
-    const user = await this.userServicePort.getUserPhoneNumber(phone_number);
+    const user = await this.authServicePort.login(phone_number);
 
     return user;
   }

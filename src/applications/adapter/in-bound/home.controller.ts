@@ -7,12 +7,13 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
+import { HomeServicePort } from 'src/applications/port/in-bound/home.service.port';
 
 @ApiTags('homes')
 @Controller('homes')
 @ApiBearerAuth()
 export class HomeController {
-  constructor() {}
+  constructor(private readonly homeServicePort: HomeServicePort) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -29,5 +30,7 @@ export class HomeController {
     status: 400,
     description: '실패(잘못된 요청)',
   })
-  async getTies(@User() user_id: number): Promise<any> {}
+  async getTies(@User() user_id: number): Promise<any> {
+    return await this.homeServicePort.getHome(user_id);
+  }
 }

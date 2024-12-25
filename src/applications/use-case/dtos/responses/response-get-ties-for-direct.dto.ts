@@ -1,6 +1,6 @@
 import { IsBoolean, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
-export class ResponseGetTieDto {
+export class ResponseGetTiesForDirectDto {
   @IsInt()
   @IsNotEmpty()
   id: number;
@@ -16,12 +16,4 @@ export class ResponseGetTieDto {
   @IsBoolean()
   @IsNotEmpty()
   isMyTicket: boolean;
-
-  @IsBoolean()
-  @IsNotEmpty()
-  isOpponentTicket: boolean;
-
-  @IsBoolean()
-  @IsNotEmpty()
-  isFailed: boolean;
 }

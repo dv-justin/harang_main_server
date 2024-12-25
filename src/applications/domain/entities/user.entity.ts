@@ -21,8 +21,8 @@ export class UserEntity {
   @Column({ length: 10 })
   gender: string;
 
-  @Column({ type: 'date' })
-  birthdate: Date;
+  @Column({ length: 10 })
+  birthdate: string;
 
   @Column({ length: 20 })
   phone_number: string;
@@ -77,9 +77,6 @@ export class UserEntity {
 
   @Column({ type: 'enum', enum: UserStatus, default: UserStatus.PENDING })
   status: UserStatus;
-
-  @Column({ type: 'boolean' })
-  match_status: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
