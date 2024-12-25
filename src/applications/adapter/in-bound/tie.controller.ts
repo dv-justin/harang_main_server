@@ -34,6 +34,6 @@ export class TieController {
     description: '실패(잘못된 요청)',
   })
   async getTies(@User() user_id: number): Promise<ResponseGetTieDto[]> {
-    return await this.tieServicePort.getTies(user_id);
+    return await this.tieServicePort.getTiesForDirect(user_id);
   }
 }

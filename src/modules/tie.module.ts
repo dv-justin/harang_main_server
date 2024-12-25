@@ -21,6 +21,11 @@ import { UserModule } from './user.module';
       useClass: TieRepository,
     },
   ],
-  exports: [],
+  exports: [
+    {
+      provide: TieServicePort,
+      useClass: TieService,
+    },
+  ],
 })
 export class TieModule {}

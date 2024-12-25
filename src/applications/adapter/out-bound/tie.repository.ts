@@ -31,11 +31,17 @@ export class TieRepository implements TieRepositoryPort {
           id: true,
           name: true,
           gender: true,
+          region_level1: true,
+          region_level2: true,
+          birthdate: true,
         },
         female_user: {
           id: true,
           name: true,
           gender: true,
+          region_level1: true,
+          region_level2: true,
+          birthdate: true,
         },
       },
     });

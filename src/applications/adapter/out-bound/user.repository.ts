@@ -22,6 +22,7 @@ export class UserRepository implements UserRepositoryPort {
       },
       select: {
         id: true,
+        status: true,
         name: true,
         birthdate: true,
         gender: true,
