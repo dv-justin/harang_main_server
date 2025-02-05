@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsBoolean,
+} from 'class-validator';
 
 export class ResponseGetUserIdDto {
   @IsNotEmpty()
@@ -72,4 +78,16 @@ export class ResponseGetUserIdDto {
   @IsOptional()
   @IsString()
   merit?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  manUserTicketUsed?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  femaleUserTicketUsed?: boolean;
+
+  @IsOptional()
+  @IsString()
+  allTicketsUsedBy?: string;
 }

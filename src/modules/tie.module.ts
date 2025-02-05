@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TieController } from 'src/applications/adapter/in-bound/tie.controller';
 import { TieRepository } from 'src/applications/adapter/out-bound/tie.repository';
@@ -9,7 +9,10 @@ import { TieService } from 'src/applications/use-case/tie.service';
 import { UserModule } from './user.module';
 
 @Module({
-  imports: [UserModule, TypeOrmModule.forFeature([UserMatchMeetingEntity])],
+  imports: [
+    forwardRef(() => UserModule),
+    TypeOrmModule.forFeature([UserMatchMeetingEntity]),
+  ],
   controllers: [TieController],
   providers: [
     {

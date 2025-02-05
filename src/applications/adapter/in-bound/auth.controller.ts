@@ -31,7 +31,6 @@ export class AuthController {
     @Param('phone_number') phone_number: string,
   ): Promise<ResponseLoginDto> {
     const user = await this.authServicePort.login(phone_number);
-
     return user;
   }
 

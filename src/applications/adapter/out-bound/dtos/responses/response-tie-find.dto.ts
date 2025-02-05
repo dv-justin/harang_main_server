@@ -20,7 +20,7 @@ export class UserDto {
   birthdate: string;
 }
 
-export class ResponseFindByTieDto {
+export class ResponseTieFindDto {
   @Expose()
   id: number;
 

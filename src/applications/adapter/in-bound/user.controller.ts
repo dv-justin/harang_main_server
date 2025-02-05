@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Query,
   Patch,
   UseFilters,
   UseGuards,
@@ -45,8 +46,11 @@ export class UserController {
   })
   async getUserId(
     @Param('user_id') user_id: number,
-  ): Promise<ResponseGetUserIdDto> {
-    return await this.userServicePort.getUserId(user_id);
+    @Query('include_match') include_match: boolean,
+  ): Promise<any> {
+    const user = await this.userServicePort.getUserId(user_id, include_match);
+
+    return user;
   }
 
   @Get()

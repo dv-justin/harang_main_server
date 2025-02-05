@@ -31,6 +31,10 @@ import { HomeModule } from './modules/home.module';
       database: 'harang',
       entities: [__dirname + '/applications/domain/**/*.entity.{js,ts}'],
       synchronize: false,
+      keepConnectionAlive: true,
+      extra: {
+        connectionLimit: 10,
+      },
     }),
     UserModule,
     AuthModule,
