@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 
-export class TempS3StorageUrlDto {
+export class StorageUrlDto {
   @Expose()
   Location: string;
 

@@ -1,3 +1,3 @@
-export abstract class S3TempStorageServicePort {
+export abstract class StorageServicePort {
   uploadFile: (file: Express.Multer.File[]) => Promise<{ fileUrl: string[] }>;
 }

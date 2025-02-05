@@ -2,35 +2,40 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { S3TempStorageAdapterPort } from 'src/applications/port/out-bound/s3-temp-storage.adapter.port';
-import { TempS3StorageUrlDto } from './dtos/response/response-upload-file-url.dto';
+import { StorageAdapterPort } from 'src/applications/port/out-bound/storage.adapter.port';
+import { StorageUrlDto } from './dtos/response/response-upload-file-url.dto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
-export class S3TempStorageAdapter implements S3TempStorageAdapterPort {
+export class StorageAdapter implements StorageAdapterPort {
   private s3: S3Client;
+  private bucketName: string;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    bucketName: string,
+  ) {
     this.s3 = new S3Client({
       region: this.configService.get<string>('AWS_REGION'),
       credentials: {
-        accessKeyId: this.configService.get<string>('TEMP_AWS_ACCESS_KEY_ID'),
+        accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
         secretAccessKey: this.configService.get<string>(
-          'TEMP_AWS_SECRET_ACCESS_KEY',
+          'AWS_SECRET_ACCESS_KEY',
         ),
       },
       maxAttempts: 5,
     });
+
+    this.bucketName = bucketName;
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
-    const bucketName = this.configService.get<string>('TEMP_AWS_S3_BUCKET');
     const key = `uploads/${Date.now()}-${file.originalname}`;
 
     const upload = new Upload({
       client: this.s3,
       params: {
-        Bucket: bucketName,
+        Bucket: this.bucketName,
         Key: key,
         Body: file.buffer,
         ContentType: file.mimetype,
@@ -40,7 +45,7 @@ export class S3TempStorageAdapter implements S3TempStorageAdapterPort {
     });
 
     const result = await upload.done();
-    const upload_file_dto = plainToInstance(TempS3StorageUrlDto, result, {
+    const upload_file_dto = plainToInstance(StorageUrlDto, result, {
       excludeExtraneousValues: true,
     });
 

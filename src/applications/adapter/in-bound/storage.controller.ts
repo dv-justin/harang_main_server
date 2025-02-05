@@ -7,16 +7,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { S3TempStorageServicePort } from 'src/applications/port/in-bound/s3-temp-storage.service.port';
-import { TempS3StorageUrlDto } from '../out-bound/dtos/response/response-upload-file-url.dto';
+import { StorageServicePort } from 'src/applications/port/in-bound/storage.service.port';
+import { StorageUrlDto } from '../out-bound/dtos/response/response-upload-file-url.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
-@ApiTags('image')
-@Controller('image')
-export class S3StorageController {
-  constructor(
-    private readonly s3TempStorageServicPort: S3TempStorageServicePort,
-  ) {}
+@ApiTags('images')
+@Controller('images')
+export class StorageController {
+  constructor(private readonly StorageServicPort: StorageServicePort) {}
 
   @Post('temp')
   @ApiOperation({
@@ -26,7 +24,7 @@ export class S3StorageController {
   @ApiResponse({
     status: 201,
     description: '성공',
-    type: TempS3StorageUrlDto,
+    type: StorageUrlDto,
   })
   @ApiResponse({
     status: 400,
@@ -64,6 +62,7 @@ export class S3StorageController {
   @UseInterceptors(FilesInterceptor('files', 4))
   @HttpCode(HttpStatus.CREATED)
   async uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
-    return await this.s3TempStorageServicPort.uploadFile(files);
+    console.log(files)
+    return await this.StorageServicPort.uploadFile(files);
   }
-};
+}

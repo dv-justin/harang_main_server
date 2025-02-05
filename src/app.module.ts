@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { TieModule } from './modules/tie.module';
-import { S3TempStorageModule } from './modules/s3-temp-storage.module';
+import { StorageModule } from './modules/storage.module';
 
 @Module({
   imports: [
@@ -35,7 +35,7 @@ import { S3TempStorageModule } from './modules/s3-temp-storage.module';
     UserModule,
     AuthModule,
     TieModule,
-    S3TempStorageModule
+    StorageModule
   ],
   controllers: [AppController],
   providers: [],
