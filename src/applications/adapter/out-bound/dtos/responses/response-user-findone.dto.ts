@@ -1,26 +1,26 @@
 import { Expose } from 'class-transformer';
 
-export class ResponseFindOneByUserIdDto {
+export class ResponseUserFindOneDto {
   @Expose()
-  id: number;
+  id?: number;
 
   @Expose()
-  name: string;
+  name?: string;
 
   @Expose()
-  gender: string;
+  gender?: string;
 
   @Expose()
-  birthdate: string;
+  birthdate?: string;
 
   @Expose()
-  phone_number: string;
+  phone_number?: string;
 
   @Expose()
-  region_level1: string;
+  region_level1?: string;
 
   @Expose()
-  region_level2: string;
+  region_level2?: string;
 
   @Expose()
   church_name?: string;
@@ -54,4 +54,7 @@ export class ResponseFindOneByUserIdDto {
 
   @Expose()
   merit?: string;
+
+  @Expose()
+  status?: string;
 }

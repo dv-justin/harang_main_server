@@ -50,7 +50,7 @@ export class AuthService implements AuthServicePort {
         secret: this.configService.get('JWT_SECRET'),
       });
 
-      const user = await this.userServicePort.getUserId(payload?.sub);
+      const user = await this.userServicePort.getUserId(payload?.sub, false);
       if (!user) {
         return 'user error';
       }

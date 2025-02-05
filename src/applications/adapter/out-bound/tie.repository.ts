@@ -4,7 +4,9 @@ import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import { TieRepositoryPort } from 'src/applications/port/out-bound/tie.repository.port';
 import { UserMatchMeetingEntity } from 'src/applications/domain/entities/user-match-meeting.entity';
-import { ResponseFindByTieDto } from './dtos/responses/response-find-by-tie.dto';
+import { ResponseTieFindDto } from './dtos/responses/response-tie-find.dto';
+import { FindOptions } from './interfaces/tie-find-options.interface';
+import { FindOneOptions } from './interfaces/tie-findone-options.interface';
 
 @Injectable()
 export class TieRepository implements TieRepositoryPort {
@@ -13,43 +15,27 @@ export class TieRepository implements TieRepositoryPort {
     private readonly userMatchMeetingRepository: Repository<UserMatchMeetingEntity>,
   ) {}
 
-  async findBy(
-    user_id: number,
-    gender: string,
-  ): Promise<ResponseFindByTieDto[]> {
-    const tie_entity = await this.userMatchMeetingRepository.find({
-      where:
-        gender === 'man'
-          ? { man_user: { id: user_id } }
-          : { female_user: { id: user_id } },
+  async find(
+    options: FindOptions<UserMatchMeetingEntity>,
+  ): Promise<ResponseTieFindDto[]> {
+    const ties_entity = await this.userMatchMeetingRepository.find({
+      ...options,
       relations: {
         man_user: true,
         female_user: true,
       },
-      select: {
-        man_user: {
-          id: true,
-          name: true,
-          gender: true,
-          region_level1: true,
-          region_level2: true,
-          birthdate: true,
-        },
-        female_user: {
-          id: true,
-          name: true,
-          gender: true,
-          region_level1: true,
-          region_level2: true,
-          birthdate: true,
-        },
-      },
     });
 
-    const tie_dto = plainToInstance(ResponseFindByTieDto, tie_entity, {
+    const ties_dto = plainToInstance(ResponseTieFindDto, ties_entity, {
       excludeExtraneousValues: true,
     });
 
-    return tie_dto;
+    return ties_dto;
+  }
+
+  async findOne(options: FindOneOptions<UserMatchMeetingEntity>): Promise<any> {
+    const tie_entity = await this.userMatchMeetingRepository.findOne(options);
+
+    return tie_entity;
   }
 }

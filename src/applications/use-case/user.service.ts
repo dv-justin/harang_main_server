@@ -5,9 +5,10 @@ import { UserRepositoryPort } from '../port/out-bound/user.repository.port';
 import { AuthServicePort } from '../port/in-bound/auth.service.port';
 import { ResponseGetUserIdDto } from './dtos/responses/response-get-user-id.dto';
 import { ResponseGetUserPhoneNumberDto } from './dtos/responses/response-get-user-phone-number.dto';
-import { ResponseGetUserIdTokenDto } from './dtos/responses/reponse-get-user-id-token.dto';
+import { ResponseGetUserIdTokenDto } from './dtos/responses/response-get-user-id-token.dto';
 import { RequestUpdateUserDto } from '../adapter/in-bound/dtos/requests/request-update-user.dto';
 import { UserStatus } from '../domain/enums/user-status.enum';
+import { TieServicePort } from '../port/in-bound/tie.service.port';
 
 @Injectable()
 export class UserService implements UserServicePort {
@@ -15,9 +16,16 @@ export class UserService implements UserServicePort {
     @Inject(forwardRef(() => UserRepositoryPort))
     private readonly userRepositoryPort: UserRepositoryPort,
     private readonly authServicePort: AuthServicePort,
+
+    @Inject(forwardRef(() => TieServicePort))
+    private readonly tieServicePort: TieServicePort,
   ) {}
 
-  async getUserId(user_id: number): Promise<ResponseGetUserIdDto> {
+  async getUserId(
+    user_id: number,
+    include_match: boolean,
+  ): Promise<ResponseGetUserIdDto> {
+    let tie;
     const {
       id: id,
       name: name,
@@ -37,7 +45,34 @@ export class UserService implements UserServicePort {
       couple_activity: coupleActivity,
       expected_meeting: expectedMeeting,
       merit: merit,
-    } = await this.userRepositoryPort.findOneUserId(user_id);
+    } = await this.userRepositoryPort.findOne({
+      where: { id: user_id },
+      select: [
+        'id',
+        'status',
+        'name',
+        'birthdate',
+        'gender',
+        'phone_number',
+        'region_level1',
+        'region_level2',
+        'church_name',
+        'pastor_name',
+        'school_and_major',
+        'company_name',
+        'your_faith',
+        'influential_verse',
+        'prayer_topic',
+        'vision',
+        'couple_activity',
+        'expected_meeting',
+        'merit',
+      ],
+    });
+
+    if (include_match) {
+      tie = await this.tieServicePort.getTieMatchStatus(id);
+    }
 
     return {
       id,
@@ -58,6 +93,9 @@ export class UserService implements UserServicePort {
       coupleActivity,
       expectedMeeting,
       merit,
+      manUserTicketUsed: tie?.man_user_ticket_used,
+      femaleUserTicketUsed: tie?.female_user_ticket_used,
+      allTicketsUsedBy: tie?.all_tickets_used_by,
     };
   }
 
@@ -82,7 +120,30 @@ export class UserService implements UserServicePort {
       couple_activity: coupleActivity,
       expected_meeting: expectedMeeting,
       merit: merit,
-    } = await this.userRepositoryPort.findOneUserId(user_id);
+    } = await this.userRepositoryPort.findOne({
+      where: { id: user_id },
+      select: [
+        'id',
+        'status',
+        'name',
+        'birthdate',
+        'gender',
+        'phone_number',
+        'region_level1',
+        'region_level2',
+        'church_name',
+        'pastor_name',
+        'school_and_major',
+        'company_name',
+        'your_faith',
+        'influential_verse',
+        'prayer_topic',
+        'vision',
+        'couple_activity',
+        'expected_meeting',
+        'merit',
+      ],
+    });
 
     return {
       id,
@@ -110,20 +171,27 @@ export class UserService implements UserServicePort {
   async getUserPhoneNumber(
     phone_number: string,
   ): Promise<ResponseGetUserPhoneNumberDto> {
-    const user =
-      await this.userRepositoryPort.findOneByPhoneNumber(phone_number);
+    const user = await this.userRepositoryPort.findOne({
+      where: { phone_number: phone_number },
+      select: ['phone_number'],
+    });
 
-    const tokens = await this.authServicePort.generateTokens(user?.id);
-    const return_user = { status: user?.status, ...tokens };
-    return return_user;
+    if (user) {
+      const tokens = await this.authServicePort.generateTokens(user?.id);
+      const return_user = { status: user?.status, ...tokens };
+      return return_user;
+    }
+
+    return null;
   }
 
   async saveUser(dto: RequestSaveUserDto): Promise<void> {
     const save_user = { ...dto };
 
-    const user = await this.userRepositoryPort.findOneByPhoneNumber(
-      save_user?.phone_number,
-    );
+    const user = await this.userRepositoryPort.findOne({
+      where: { phone_number: save_user?.phone_number },
+      select: ['phone_number'],
+    });
 
     if (user) {
       return;

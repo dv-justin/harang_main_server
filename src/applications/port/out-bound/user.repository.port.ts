@@ -1,10 +1,11 @@
-import { ResponseFindByPhoneNumberDto } from 'src/applications/adapter/out-bound/dtos/responses/response-find-one-by-phone-number.dto';
-import { UserInterface } from './interfaces/user';
+import { UserInterface } from './interfaces/user.interface';
+import { FindOneOptions } from 'src/applications/adapter/out-bound/interfaces/user-findone-options.interface';
+import { UserEntity } from 'src/applications/domain/entities/user.entity';
+import { ResponseUserFindOneDto } from 'src/applications/adapter/out-bound/dtos/responses/response-user-findone.dto';
 
 export abstract class UserRepositoryPort {
-  findOneUserId: (user_id: number) => Promise<any>;
-  findOneByPhoneNumber: (
-    phone_number: string,
-  ) => Promise<ResponseFindByPhoneNumberDto>;
+  findOne: (
+    options: FindOneOptions<UserEntity>,
+  ) => Promise<ResponseUserFindOneDto>;
   save: (user: UserInterface) => Promise<void>;
 }
