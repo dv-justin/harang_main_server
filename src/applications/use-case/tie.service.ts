@@ -150,7 +150,13 @@ export class TieService implements TieServicePort {
       select: ['meeting_address', 'meeting_location', 'meeting_schedule'],
     });
 
-    return tie;
+    const {
+      meeting_address: meetingAddress,
+      meeting_location: meetingLocation,
+      meeting_schedule: meetingSchedule,
+    } = tie;
+
+    return { meetingAddress, meetingLocation, meetingSchedule };
   }
 
   private getLatestMatchWithin24Hours(
