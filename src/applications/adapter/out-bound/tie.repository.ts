@@ -7,6 +7,7 @@ import { UserMatchMeetingEntity } from 'src/applications/domain/entities/user-ma
 import { ResponseTieFindDto } from './dtos/responses/response-tie-find.dto';
 import { FindOptions } from './interfaces/tie-find-options.interface';
 import { FindOneOptions } from './interfaces/tie-findone-options.interface';
+import { ResponseTieFindOneDto } from './dtos/responses/response-tie-findone.dto';
 
 @Injectable()
 export class TieRepository implements TieRepositoryPort {
@@ -33,9 +34,15 @@ export class TieRepository implements TieRepositoryPort {
     return ties_dto;
   }
 
-  async findOne(options: FindOneOptions<UserMatchMeetingEntity>): Promise<any> {
+  async findOne(
+    options: FindOneOptions<UserMatchMeetingEntity>,
+  ): Promise<ResponseTieFindOneDto> {
     const tie_entity = await this.userMatchMeetingRepository.findOne(options);
 
-    return tie_entity;
+    const tie_dto = plainToInstance(ResponseTieFindOneDto, tie_entity, {
+      excludeExtraneousValues: true,
+    });
+
+    return tie_dto;
   }
 }

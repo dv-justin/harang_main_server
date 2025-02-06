@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
 import { TieServicePort } from 'src/applications/port/in-bound/tie.service.port';
 import { JwtExceptionFilter } from 'src/filters/jwt-exception.filter';
+import { ResponseGetTiesDto } from './dtos/responses/response-get-ties.dto';
 import { ResponseGetTieDto } from './dtos/responses/response-get-tie.dto';
 
 @ApiTags('ties')
@@ -27,13 +28,13 @@ export class TieController {
   @ApiResponse({
     status: 200,
     description: '성공',
-    type: ResponseGetTieDto,
+    type: ResponseGetTiesDto,
   })
   @ApiResponse({
     status: 400,
     description: '실패(잘못된 요청)',
   })
-  async getTies(@User() user_id: number): Promise<ResponseGetTieDto[]> {
+  async getTies(@User() user_id: number): Promise<ResponseGetTiesDto[]> {
     return await this.tieServicePort.getTiesForDirect(user_id);
   }
 
@@ -47,13 +48,13 @@ export class TieController {
   @ApiResponse({
     status: 200,
     description: '성공',
-    // type: ResponseGetTieDto,
+    type: ResponseGetTieDto,
   })
   @ApiResponse({
     status: 400,
     description: '실패(잘못된 요청)',
   })
-  async getTie(@Param('tie_id') tie_id: number): Promise<any> {
+  async getTie(@Param('tie_id') tie_id: number): Promise<ResponseGetTieDto> {
     return await this.tieServicePort.getTie(tie_id);
   }
 }

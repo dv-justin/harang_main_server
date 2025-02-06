@@ -1,19 +1,15 @@
-import { IsBoolean, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class ResponseGetTieDto {
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  id: number;
+  meeting_address: string;
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  meeting_location: string;
 
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  meetingStatus: number;
-
-  @IsBoolean()
-  @IsNotEmpty()
-  isMyTicket: boolean;
+  meeting_schedule: string;
 }
