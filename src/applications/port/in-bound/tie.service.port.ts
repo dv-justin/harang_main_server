@@ -1,3 +1,11 @@
+import { ResponseGetTieMatchStatusDto } from 'src/applications/use-case/dtos/responses/response-get-tie-match-status.dto';
+import { ResponseGetTieDto } from 'src/applications/use-case/dtos/responses/response-get-tie.dto';
+import { ResponseGetTiesForDirectDto } from 'src/applications/use-case/dtos/responses/response-get-ties-for-direct.dto';
+import { ResponseGetTiesForHomeDto } from 'src/applications/use-case/dtos/responses/response-get-ties-for-home.dto';
+
 export abstract class TieServicePort {
-  getTies: (user_id: number) => Promise<any>;
+  getTiesForDirect: (user_id: number) => Promise<ResponseGetTiesForDirectDto[]>;
+  getTiesForHome: (user_id: number) => Promise<ResponseGetTiesForHomeDto>;
+  getTieMatchStatus: (user_id: number) => Promise<ResponseGetTieMatchStatusDto>;
+  getTie: (tie_id: number) => Promise<ResponseGetTieDto>;
 }

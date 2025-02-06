@@ -3,9 +3,24 @@ import { Expose, Type } from 'class-transformer';
 export class UserDto {
   @Expose()
   id: number;
+
+  @Expose()
+  name: string;
+
+  @Expose()
+  gender: string;
+
+  @Expose()
+  region_level1: string;
+
+  @Expose()
+  region_level2: string;
+
+  @Expose()
+  birthdate: string;
 }
 
-export class ResponseFindByTieDto {
+export class ResponseTieFindDto {
   @Expose()
   id: number;
 
@@ -18,10 +33,16 @@ export class ResponseFindByTieDto {
   female_user: UserDto;
 
   @Expose()
-  meeting_date: string | null;
+  meeting_status: number;
 
   @Expose()
-  meeting_status: number;
+  meeting_location: string;
+
+  @Expose()
+  meeting_address: string;
+
+  @Expose()
+  meeting_schedule: string;
 
   @Expose()
   created_at: string;
