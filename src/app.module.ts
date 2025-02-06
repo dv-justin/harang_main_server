@@ -7,6 +7,7 @@ import { AuthModule } from './modules/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { TieModule } from './modules/tie.module';
 import { StorageModule } from './modules/storage.module';
+import { HomeModule } from './modules/home.module';
 
 @Module({
   imports: [
@@ -22,20 +23,28 @@ import { StorageModule } from './modules/storage.module';
         signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN') },
       }),
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'database-1-harang.c9o4eyoiwaus.ap-northeast-2.rds.amazonaws.com',
-      port: 3306,
-      username: 'admin',
-      password: 'KOIGBfCEtzVrf7MSzIJR',
-      database: 'harang',
-      entities: [__dirname + '/applications/domain/**/*.entity.{js,ts}'],
-      synchronize: false,
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        entities: [__dirname + '/applications/domain/**/*.entity.{js,ts}'],
+        synchronize: false,
+        keepConnectionAlive: true,
+        extra: {
+          connectionLimit: 10,
+        },
+      }),
     }),
     UserModule,
     AuthModule,
     TieModule,
-    StorageModule
+    StorageModule,
+    HomeModule,
   ],
   controllers: [AppController],
   providers: [],

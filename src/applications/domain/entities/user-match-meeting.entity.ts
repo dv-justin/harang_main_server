@@ -8,7 +8,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity'; // 유저 엔티티를 import하세요.
+import { UserEntity } from './user.entity';
 
 @Entity('user_match_meetings')
 export class UserMatchMeetingEntity {
@@ -27,9 +27,6 @@ export class UserMatchMeetingEntity {
   @JoinColumn({ name: 'female_user_id' })
   female_user: UserEntity;
 
-  @Column({ type: 'date' })
-  meeting_date: string;
-
   @Column({ type: 'tinyint' })
   meeting_status: number;
 
@@ -40,7 +37,28 @@ export class UserMatchMeetingEntity {
   female_user_ticket_used: number;
 
   @Column({ type: 'tinyint' })
+  man_user_after: number;
+
+  @Column({ type: 'tinyint' })
+  female_user_after: number;
+
+  @Column({ type: 'tinyint' })
   is_failed: number;
+
+  @Column({ length: 10, default: null })
+  all_tickets_used_by: string;
+
+  @Column({ length: 255, default: null })
+  meeting_location: string;
+
+  @Column({ length: 255, default: null })
+  meeting_address: string;
+
+  @Column({ length: 255, default: null })
+  meeting_schedule: string;
+
+  @Column({ type: 'tinyint' })
+  is_accept: number;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
