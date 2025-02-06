@@ -3,13 +3,13 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class ResponseGetTieDto {
   @IsString()
   @IsNotEmpty()
-  meeting_address: string;
+  meetingAddress: string;
 
   @IsString()
   @IsNotEmpty()
-  meeting_location: string;
+  meetingLocation: string;
 
   @IsString()
   @IsNotEmpty()
-  meeting_schedule: string;
+  meetingSchedule: string;
 }
