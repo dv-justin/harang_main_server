@@ -1,3 +1,5 @@
+import { UserStatus } from 'src/applications/domain/enums/user-status.enum';
+
 export interface UserInterface {
   birthdate: string;
   name: string;
@@ -16,6 +18,7 @@ export interface UserInterface {
   couple_activity: string;
   expected_meeting: string;
   merit: string;
-  ideal_type_age: string;
-  ideal_type_distance: number;
+  status?: UserStatus;
+  ideal_type_age?: string;
+  ideal_type_distance?: number;
 }
