@@ -5,6 +5,7 @@ import { StorageAdapterPort } from '../port/out-bound/storage.adapter.port';
 @Injectable()
 export class StorageService implements StorageServicePort {
   private readonly allowedExtensions: string[];
+  private readonly regex: RegExp;
 
   constructor(private readonly StorageAdapterPort: StorageAdapterPort) {
     this.allowedExtensions = [
@@ -23,6 +24,8 @@ export class StorageService implements StorageServicePort {
       'nef',
       'arw',
     ];
+
+    this.regex = /https:\/\/[^/]+\/(.*)/;
   }
 
   async uploadFile(
@@ -45,5 +48,26 @@ export class StorageService implements StorageServicePort {
     );
 
     return { fileUrl };
+  }
+
+  async moveFile(tempUrls: string[]): Promise<{ finalUrls: string[] }> {
+    if (!tempUrls || tempUrls.length === 0) {
+      throw new HttpException('파일이 제공되지 않았습니다.', 404);
+    }
+
+    const keys = tempUrls.map((url) => {
+      const match = url.match(this.regex);
+      if (!match || !match[1]) {
+        throw new HttpException('URL 형식을 확인해주세요.', 400);
+      }
+
+      return match[1];
+    });
+
+    const finalUrls = await Promise.all(
+      keys.map((key) => this.StorageAdapterPort.moveFile(key)),
+    );
+
+    return { finalUrls };
   }
 }
