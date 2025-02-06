@@ -47,7 +47,7 @@ export class UserController {
   async getUserId(
     @Param('user_id') user_id: number,
     @Query('include_match') include_match: boolean,
-  ): Promise<any> {
+  ): Promise<ResponseGetUserIdDto> {
     const user = await this.userServicePort.getUserId(user_id, include_match);
 
     return user;
@@ -57,8 +57,8 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @UseFilters(JwtExceptionFilter)
   @ApiOperation({
-    summary: '회원 user_id 조회 api',
-    description: '회원 user_id 조회 api',
+    summary: '회원 user_id 토큰 조회 api',
+    description: '회원 user_id 토큰 조회 api',
   })
   @ApiResponse({
     status: 200,
@@ -79,8 +79,8 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @UseFilters(JwtExceptionFilter)
   @ApiOperation({
-    summary: '회원 user_id 조회 api',
-    description: '회원 user_id 조회 api',
+    summary: '회원 수정 api',
+    description: '회원 수정 api',
   })
   @ApiResponse({
     status: 200,

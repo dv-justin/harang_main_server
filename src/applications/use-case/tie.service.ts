@@ -3,10 +3,10 @@ import { TieRepositoryPort } from '../port/out-bound/tie.repository.port';
 import { TieServicePort } from '../port/in-bound/tie.service.port';
 import { UserServicePort } from '../port/in-bound/user.service.port';
 import { ResponseGetTiesForDirectDto } from './dtos/responses/response-get-ties-for-direct.dto';
-import { ResponseGetTiesForHomeDto } from './dtos/responses/response-get-ties-for-home.dto';
 import { ResponseTieFindDto } from '../adapter/out-bound/dtos/responses/response-tie-find.dto';
 import { ResponseGetTieMatchStatusDto } from './dtos/responses/response-get-tie-match-status.dto';
 import { ResponseGetTieDto } from './dtos/responses/response-get-tie.dto';
+import { ResponseGetTiesForHomeDto } from './dtos/responses/response-get-ties-for-home.dto';
 
 @Injectable()
 export class TieService implements TieServicePort {

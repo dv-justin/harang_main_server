@@ -8,6 +8,7 @@ import {
 import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
 import { HomeServicePort } from 'src/applications/port/in-bound/home.service.port';
+import { ResponseGetHomeDto } from './dtos/responses/response-get-home.dto';
 
 @ApiTags('homes')
 @Controller('homes')
@@ -24,13 +25,13 @@ export class HomeController {
   @ApiResponse({
     status: 200,
     description: '성공',
-    // type: ResponseGetTieDto,
+    type: ResponseGetHomeDto,
   })
   @ApiResponse({
     status: 400,
     description: '실패(잘못된 요청)',
   })
-  async getTies(@User() user_id: number): Promise<any> {
+  async getTies(@User() user_id: number): Promise<ResponseGetHomeDto> {
     return await this.homeServicePort.getHome(user_id);
   }
 }

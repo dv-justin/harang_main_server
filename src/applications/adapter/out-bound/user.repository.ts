@@ -15,7 +15,9 @@ export class UserRepository implements UserRepositoryPort {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async findOne(options: FindOneOptions<UserEntity>): Promise<any> {
+  async findOne(
+    options: FindOneOptions<UserEntity>,
+  ): Promise<ResponseUserFindOneDto> {
     const user_entity = this.userRepository.findOne(options);
 
     const user_dto = plainToInstance(ResponseUserFindOneDto, user_entity);
