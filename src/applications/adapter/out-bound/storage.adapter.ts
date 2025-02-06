@@ -57,9 +57,10 @@ export class StorageAdapter implements StorageAdapterPort {
   }
 
   async moveFile(key: string): Promise<string> {
+    const decodedKey = decodeURIComponent(key)
     const command = new GetObjectCommand({
       Bucket: this.tempBucketName,
-      Key: key,
+      Key: decodedKey,
     });
     const response = await this.s3.send(command);
     const body = response.Body as unknown as PassThrough;

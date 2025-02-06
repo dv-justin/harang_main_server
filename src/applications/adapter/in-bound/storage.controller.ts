@@ -62,7 +62,6 @@ export class StorageController {
   @UseInterceptors(FilesInterceptor('files', 4))
   @HttpCode(HttpStatus.CREATED)
   async uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
-    console.log(files)
     return await this.StorageServicPort.uploadFile(files);
   }
 }
