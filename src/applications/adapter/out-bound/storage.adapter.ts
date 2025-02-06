@@ -3,7 +3,7 @@ import { Upload } from '@aws-sdk/lib-storage';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { StorageAdapterPort } from 'src/applications/port/out-bound/storage.adapter.port';
-import { StorageUrlDto } from './dtos/response/response-upload-file-url.dto';
+import { StorageUrlDto } from './dtos/responses/response-upload-file-url.dto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()

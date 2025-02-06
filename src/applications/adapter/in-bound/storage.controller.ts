@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StorageServicePort } from 'src/applications/port/in-bound/storage.service.port';
-import { StorageUrlDto } from '../out-bound/dtos/response/response-upload-file-url.dto';
+import { StorageUrlDto } from '../out-bound/dtos/responses/response-upload-file-url.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('images')
