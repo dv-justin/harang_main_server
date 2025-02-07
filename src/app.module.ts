@@ -44,7 +44,7 @@ import { StorageModule } from './modules/storage.module';
     AuthModule,
     TieModule,
     HomeModule,
-    StorageModule
+    StorageModule,
   ],
   controllers: [AppController],
   providers: [],
