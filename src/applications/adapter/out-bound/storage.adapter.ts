@@ -1,19 +1,22 @@
-import { S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { StorageAdapterPort } from 'src/applications/port/out-bound/storage.adapter.port';
 import { StorageUrlDto } from './dtos/responses/response-upload-file-url.dto';
 import { plainToInstance } from 'class-transformer';
+import { PassThrough } from 'stream';
 
 @Injectable()
 export class StorageAdapter implements StorageAdapterPort {
   private s3: S3Client;
-  private bucketName: string;
+  private tempBucketName: string;
+  private finalBucketName: string;
 
   constructor(
     private readonly configService: ConfigService,
-    bucketName: string,
+    tempBucketName: string,
+    finalBucketName: string,
   ) {
     this.s3 = new S3Client({
       region: this.configService.get<string>('AWS_REGION'),
@@ -26,7 +29,8 @@ export class StorageAdapter implements StorageAdapterPort {
       maxAttempts: 5,
     });
 
-    this.bucketName = bucketName;
+    this.tempBucketName = tempBucketName;
+    this.finalBucketName = finalBucketName;
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
@@ -35,10 +39,41 @@ export class StorageAdapter implements StorageAdapterPort {
     const upload = new Upload({
       client: this.s3,
       params: {
-        Bucket: this.bucketName,
+        Bucket: this.tempBucketName,
         Key: key,
         Body: file.buffer,
         ContentType: file.mimetype,
+      },
+      partSize: 10 * 1024 * 1024,
+      leavePartsOnError: true,
+    });
+
+    const result = await upload.done();
+    const upload_file_dto = plainToInstance(StorageUrlDto, result, {
+      excludeExtraneousValues: true,
+    });
+
+    return upload_file_dto.Location;
+  }
+
+  async moveFile(key: string): Promise<string> {
+    const command = new GetObjectCommand({
+      Bucket: this.tempBucketName,
+      Key: key,
+    });
+    const response = await this.s3.send(command);
+    const body = response.Body as unknown as PassThrough;
+
+    const passThroughStream = new PassThrough();
+    body.pipe(passThroughStream);
+
+    const upload = new Upload({
+      client: this.s3,
+      params: {
+        Bucket: this.finalBucketName,
+        Key: key,
+        Body: passThroughStream,
+        ContentType: response.ContentType,
       },
       partSize: 10 * 1024 * 1024,
       leavePartsOnError: true,
