@@ -21,6 +21,8 @@ import { JwtExceptionFilter } from 'src/filters/jwt-exception.filter';
 import { User } from 'src/decorators/user.decorator';
 import { ResponseGetUserIdTokenDto } from './dtos/responses/response-get-user-id-token.dto';
 import { RequestUpdateUserDto } from './dtos/requests/request-update-user.dto';
+import { RequestUpdateIdealTypeDto } from './dtos/requests/request-update-ideal-type.dto';
+import { ResponseUpdateIdealTypeDto } from './dtos/responses/response-update-ideal-type.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -96,5 +98,28 @@ export class UserController {
     @Body() dto: RequestUpdateUserDto,
   ): Promise<void> {
     await this.userServicePort.updateUser(user_id, dto);
+  }
+
+  @Patch('idealType')
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
+  @ApiOperation({
+    summary: '이상형 수정 api',
+    description: '이상형 수정 api',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '성공',
+    type: ResponseUpdateIdealTypeDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '실패(잘못된 요청)',
+  })
+  async updateIdealType(
+    @User() user_id: number,
+    @Body() dto: RequestUpdateIdealTypeDto,
+  ): Promise<ResponseUpdateIdealTypeDto> {
+    return await this.userServicePort.updateIdealType(user_id, dto);
   }
 }

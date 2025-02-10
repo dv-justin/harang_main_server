@@ -9,6 +9,8 @@ import { ResponseGetUserIdTokenDto } from './dtos/responses/response-get-user-id
 import { RequestUpdateUserDto } from '../adapter/in-bound/dtos/requests/request-update-user.dto';
 import { UserStatus } from '../domain/enums/user-status.enum';
 import { TieServicePort } from '../port/in-bound/tie.service.port';
+import { RequestUpdateIdealTypeDto } from '../adapter/in-bound/dtos/requests/request-update-ideal-type.dto';
+import { ResponseUpdateIdealTypeDto } from './dtos/responses/response-update-ideal-type.dto';
 
 @Injectable()
 export class UserService implements UserServicePort {
@@ -242,5 +244,23 @@ export class UserService implements UserServicePort {
       merit,
     };
     await this.userRepositoryPort.save({ ...user, status: UserStatus.PENDING });
+  }
+
+  async updateIdealType(
+    user_id: number,
+    dto: RequestUpdateIdealTypeDto,
+  ): Promise<ResponseUpdateIdealTypeDto> {
+    const where = { id: user_id };
+    await this.userRepositoryPort.update(where, dto);
+
+    const ideal = await this.userRepositoryPort.findOne({
+      where,
+      select: ['ideal_type_age', 'ideal_type_distance'],
+    });
+
+    return {
+      ideal_type_age: ideal.ideal_type_age,
+      ideal_type_distance: ideal.ideal_type_distance,
+    };
   }
 }

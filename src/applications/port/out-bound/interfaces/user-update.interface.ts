@@ -1,66 +1,25 @@
-import { Expose } from 'class-transformer';
+import { UserStatus } from 'src/applications/domain/enums/user-status.enum';
 
-export class ResponseUserFindOneDto {
-  @Expose()
-  id?: number;
-
-  @Expose()
-  name?: string;
-
-  @Expose()
-  gender?: string;
-
-  @Expose()
+export interface UserUpdateInterface {
   birthdate?: string;
-
-  @Expose()
+  name?: string;
+  gender?: string;
   phone_number?: string;
-
-  @Expose()
   region_level1?: string;
-
-  @Expose()
   region_level2?: string;
-
-  @Expose()
   church_name?: string;
-
-  @Expose()
   pastor_name?: string;
-
-  @Expose()
   school_and_major?: string;
-
-  @Expose()
   company_name?: string;
-
-  @Expose()
   your_faith?: string;
-
-  @Expose()
   influential_verse?: string;
-
-  @Expose()
   prayer_topic?: string;
-
-  @Expose()
   vision?: string;
-
-  @Expose()
   couple_activity?: string;
-
-  @Expose()
   expected_meeting?: string;
-
-  @Expose()
   merit?: string;
-
-  @Expose()
-  status?: string;
-
-  @Expose()
+  status?: UserStatus;
   ideal_type_age?: string;
-
-  @Expose()
   ideal_type_distance?: number;
+  profile_image?: string[];
 }
