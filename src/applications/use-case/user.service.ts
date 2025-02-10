@@ -173,7 +173,7 @@ export class UserService implements UserServicePort {
   ): Promise<ResponseGetUserPhoneNumberDto> {
     const user = await this.userRepositoryPort.findOne({
       where: { phone_number: phone_number },
-      select: ['phone_number'],
+      select: ['phone_number', 'id'],
     });
 
     if (user) {
