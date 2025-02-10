@@ -243,4 +243,8 @@ export class UserService implements UserServicePort {
     };
     await this.userRepositoryPort.save({ ...user, status: UserStatus.PENDING });
   }
+
+  async deleteUser(user_id: number): Promise<void> {
+    await this.userRepositoryPort.delete(user_id);
+  }
 }

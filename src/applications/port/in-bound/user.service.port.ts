@@ -15,4 +15,5 @@ export abstract class UserServicePort {
   ) => Promise<ResponseGetUserPhoneNumberDto>;
   saveUser: (dto: RequestSaveUserDto) => Promise<void>;
   updateUser: (user_id: number, dto: RequestUpdateUserDto) => Promise<void>;
+  deleteUser: (user_id: number) => Promise<void>;
 }
