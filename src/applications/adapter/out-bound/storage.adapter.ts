@@ -10,13 +10,13 @@ import { PassThrough } from 'stream';
 @Injectable()
 export class StorageAdapter implements StorageAdapterPort {
   private s3: S3Client;
-  private tempBucketName: string;
-  private finalBucketName: string;
+  private temp_bucket_name: string;
+  private final_bucket_name: string;
 
   constructor(
     private readonly configService: ConfigService,
-    tempBucketName: string,
-    finalBucketName: string,
+    temp_bucket_name: string,
+    final_bucket_name: string,
   ) {
     this.s3 = new S3Client({
       region: this.configService.get<string>('AWS_REGION'),
@@ -29,8 +29,8 @@ export class StorageAdapter implements StorageAdapterPort {
       maxAttempts: 5,
     });
 
-    this.tempBucketName = tempBucketName;
-    this.finalBucketName = finalBucketName;
+    this.temp_bucket_name = temp_bucket_name;
+    this.final_bucket_name = final_bucket_name;
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
@@ -39,7 +39,7 @@ export class StorageAdapter implements StorageAdapterPort {
     const upload = new Upload({
       client: this.s3,
       params: {
-        Bucket: this.tempBucketName,
+        Bucket: this.temp_bucket_name,
         Key: key,
         Body: file.buffer,
         ContentType: file.mimetype,
@@ -58,21 +58,21 @@ export class StorageAdapter implements StorageAdapterPort {
 
   async moveFile(key: string): Promise<string> {
     const command = new GetObjectCommand({
-      Bucket: this.tempBucketName,
+      Bucket: this.temp_bucket_name,
       Key: key,
     });
     const response = await this.s3.send(command);
     const body = response.Body as unknown as PassThrough;
 
-    const passThroughStream = new PassThrough();
-    body.pipe(passThroughStream);
+    const pass_through_stream = new PassThrough();
+    body.pipe(pass_through_stream);
 
     const upload = new Upload({
       client: this.s3,
       params: {
-        Bucket: this.finalBucketName,
+        Bucket: this.final_bucket_name,
         Key: key,
-        Body: passThroughStream,
+        Body: pass_through_stream,
         ContentType: response.ContentType,
       },
       partSize: 10 * 1024 * 1024,

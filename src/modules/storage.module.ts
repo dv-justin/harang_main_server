@@ -13,14 +13,14 @@ import { StorageService } from 'src/applications/use-case/storage.service';
     {
       provide: StorageAdapterPort,
       useFactory: (configService: ConfigService) => {
-        const tempBucketName = configService.get<string>('TEMP_AWS_S3_BUCKET');
-        const finalBucketName = configService.get<string>(
+        const temp_bucket_name = configService.get<string>('TEMP_AWS_S3_BUCKET');
+        const final_bucket_name = configService.get<string>(
           'FINAL_AWS_S3_BUCKET',
         );
         return new StorageAdapter(
           configService,
-          tempBucketName,
-          finalBucketName,
+          temp_bucket_name,
+          final_bucket_name,
         );
       },
       inject: [ConfigService],
