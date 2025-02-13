@@ -13,11 +13,12 @@ export class StorageAdapter implements StorageAdapterPort {
   private temp_bucket_name: string;
   private final_bucket_name: string;
 
-  constructor(
-    private readonly configService: ConfigService,
-    temp_bucket_name: string,
-    final_bucket_name: string,
-  ) {
+  constructor(private readonly configService: ConfigService) {
+    this.temp_bucket_name =
+      this.configService.get<string>('TEMP_AWS_S3_BUCKET');
+    this.final_bucket_name = this.configService.get<string>(
+      'FINAL_AWS_S3_BUCKET',
+    );
     this.s3 = new S3Client({
       region: this.configService.get<string>('AWS_REGION'),
       credentials: {
@@ -28,9 +29,6 @@ export class StorageAdapter implements StorageAdapterPort {
       },
       maxAttempts: 5,
     });
-
-    this.temp_bucket_name = temp_bucket_name;
-    this.final_bucket_name = final_bucket_name;
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {

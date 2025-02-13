@@ -51,7 +51,7 @@ export class StorageService implements StorageServicePort {
   }
 
   async moveFile(urls: string[]): Promise<{ file_urls: string[] }> {
-    if (!urls || urls.length === 0) {
+    if (!urls?.length) {
       throw new HttpException('파일이 제공되지 않았습니다.', 404);
     }
 
