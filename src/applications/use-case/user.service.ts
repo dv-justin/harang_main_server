@@ -11,6 +11,9 @@ import { UserStatus } from '../domain/enums/user-status.enum';
 import { TieServicePort } from '../port/in-bound/tie.service.port';
 import { RequestUpdateIdealTypeDto } from '../adapter/in-bound/dtos/requests/request-update-ideal-type.dto';
 import { ResponseUpdateIdealTypeDto } from './dtos/responses/response-update-ideal-type.dto';
+import { RequestUpdateProfileDto } from '../adapter/in-bound/dtos/requests/request-update-profile.dto';
+import { ResponseUpdateProfileDto } from './dtos/responses/response-update-profile.dto';
+import { UserUpdateInterface } from '../port/out-bound/interfaces/user-update.interface';
 
 @Injectable()
 export class UserService implements UserServicePort {
@@ -261,6 +264,67 @@ export class UserService implements UserServicePort {
     return {
       ideal_type_age: ideal.ideal_type_age,
       ideal_type_distance: ideal.ideal_type_distance,
+    };
+  }
+
+  async updateProfile(
+    user_id: number,
+    dto: RequestUpdateProfileDto,
+  ): Promise<ResponseUpdateProfileDto> {
+    const { profile_image, ...rest } = dto;
+    const update_data: UserUpdateInterface = { ...rest };
+
+    if (profile_image && !(profile_image?.temp_urls.length === 0)) {
+      // final url로 변경
+      // update_data.profile_image
+    }
+
+    await this.userRepositoryPort.update({ id: user_id }, update_data);
+    const user = await this.userRepositoryPort.findOne({
+      where: { id: user_id },
+      select: [
+        'id',
+        'name',
+        'gender',
+        'birthdate',
+        'phone_number',
+        'region_level1',
+        'region_level2',
+        'church_name',
+        'pastor_name',
+        'school_and_major',
+        'company_name',
+        'your_faith',
+        'influential_verse',
+        'prayer_topic',
+        'vision',
+        'couple_activity',
+        'expected_meeting',
+        'merit',
+        'profile_image',
+      ],
+    });
+
+    return {
+      id: user.id,
+      name: user.name,
+      gender: user.gender,
+      birthdate: user.birthdate,
+      phone_number: user.phone_number,
+      region_level1: user.region_level1,
+      region_level2: user.region_level2,
+      church_name: user.church_name,
+      pastor_name: user.pastor_name,
+      school_and_major: user.school_and_major,
+      company_name: user.company_name,
+      your_faith: user.your_faith,
+      influential_verse: user.influential_verse,
+      prayer_topic: user.prayer_topic,
+      vision: user.vision,
+      couple_activity: user.couple_activity,
+      expected_meeting: user.expected_meeting,
+      merit: user.merit,
+      profile_image: user.profile_image,
     };
   }
 }

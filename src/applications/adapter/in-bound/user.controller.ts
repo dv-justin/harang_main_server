@@ -23,6 +23,8 @@ import { ResponseGetUserIdTokenDto } from './dtos/responses/response-get-user-id
 import { RequestUpdateUserDto } from './dtos/requests/request-update-user.dto';
 import { RequestUpdateIdealTypeDto } from './dtos/requests/request-update-ideal-type.dto';
 import { ResponseUpdateIdealTypeDto } from './dtos/responses/response-update-ideal-type.dto';
+import { RequestUpdateProfileDto } from './dtos/requests/request-update-profile.dto';
+import { ResponseUpdateProfileDto } from './dtos/responses/response-update-user-profile.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -121,5 +123,28 @@ export class UserController {
     @Body() dto: RequestUpdateIdealTypeDto,
   ): Promise<ResponseUpdateIdealTypeDto> {
     return await this.userServicePort.updateIdealType(user_id, dto);
+  }
+
+  @Patch('profile')
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
+  @ApiOperation({
+    summary: '내 프로필 수정 api',
+    description: '내 프로필 수정 api',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '성공',
+    type: ResponseUpdateProfileDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '실패(잘못된 요청)',
+  })
+  async updateProfile(
+    @User() user_id: number,
+    @Body() dto: RequestUpdateProfileDto,
+  ): Promise<ResponseUpdateProfileDto> {
+    return await this.userServicePort.updateProfile(user_id, dto);
   }
 }
