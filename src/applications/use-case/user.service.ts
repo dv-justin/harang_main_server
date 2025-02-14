@@ -14,6 +14,7 @@ import { ResponseUpdateIdealTypeDto } from './dtos/responses/response-update-ide
 import { RequestUpdateProfileDto } from '../adapter/in-bound/dtos/requests/request-update-profile.dto';
 import { ResponseUpdateProfileDto } from './dtos/responses/response-update-profile.dto';
 import { UserUpdateInterface } from '../port/out-bound/interfaces/user-update.interface';
+import { StorageServicePort } from '../port/in-bound/storage.service.port';
 
 @Injectable()
 export class UserService implements UserServicePort {
@@ -21,6 +22,7 @@ export class UserService implements UserServicePort {
     @Inject(forwardRef(() => UserRepositoryPort))
     private readonly userRepositoryPort: UserRepositoryPort,
     private readonly authServicePort: AuthServicePort,
+    private readonly storageServicePort: StorageServicePort,
 
     @Inject(forwardRef(() => TieServicePort))
     private readonly tieServicePort: TieServicePort,
@@ -274,9 +276,12 @@ export class UserService implements UserServicePort {
     const { profile_image, ...rest } = dto;
     const update_data: UserUpdateInterface = { ...rest };
 
-    if (profile_image && !(profile_image?.temp_urls.length === 0)) {
-      // final url로 변경
-      // update_data.profile_image
+    if (profile_image?.temp_urls.length) {
+      const { urls, temp_urls } = profile_image;
+      const update_url = await this.storageServicePort.moveFile(temp_urls);
+      const update_image = { file_urls: [...urls, ...update_url.file_urls] };
+
+      update_data.profile_image = update_image;
     }
 
     await this.userRepositoryPort.update({ id: user_id }, update_data);
