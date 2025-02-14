@@ -12,17 +12,18 @@ import { StorageService } from 'src/applications/use-case/storage.service';
   providers: [
     {
       provide: StorageAdapterPort,
-      useFactory: (configService: ConfigService) => {
-        const bucketName = configService.get<string>('TEMP_AWS_S3_BUCKET');
-        return new StorageAdapter(configService, bucketName);
-      },
-      inject: [ConfigService],
+      useClass: StorageAdapter,
     },
     {
       provide: StorageServicePort,
       useClass: StorageService,
     },
   ],
-  exports: [],
+  exports: [
+    {
+      provide: StorageServicePort,
+      useClass: StorageService,
+    },
+  ],
 })
 export class StorageModule {}
