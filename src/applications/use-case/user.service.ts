@@ -252,8 +252,8 @@ export class UserService implements UserServicePort {
     });
 
     return {
-      ideal_type_age: result.ideal_type_age,
-      ideal_type_distance: result.ideal_type_distance,
+      idealTypeAge: result?.ideal_type_age,
+      idealTypeDistance: result?.ideal_type_distance,
     };
   }
   
