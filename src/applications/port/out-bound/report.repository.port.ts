@@ -1,5 +1,5 @@
-import { ReportInterface } from './interfaces/report.interface';
+import { ReportSaveInterface } from 'src/applications/adapter/out-bound/interfaces/report-save.interface';
 
 export abstract class ReportRepositoryPort {
-  save: (report: ReportInterface) => Promise<void>;
+  save: (report: ReportSaveInterface) => Promise<void>;
 }
