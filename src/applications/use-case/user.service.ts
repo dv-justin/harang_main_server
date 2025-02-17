@@ -173,7 +173,7 @@ export class UserService implements UserServicePort {
   ): Promise<ResponseGetUserPhoneNumberDto> {
     const user = await this.userRepositoryPort.findOne({
       where: { phone_number: phone_number },
-      select: ['phone_number'],
+      select: ['phone_number', 'id'],
     });
 
     if (user) {
@@ -242,5 +242,9 @@ export class UserService implements UserServicePort {
       merit,
     };
     await this.userRepositoryPort.save({ ...user, status: UserStatus.PENDING });
+  }
+
+  async deleteUser(user_id: number): Promise<void> {
+    await this.userRepositoryPort.delete(user_id);
   }
 }
