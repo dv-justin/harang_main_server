@@ -7,6 +7,8 @@ import {
   Patch,
   UseFilters,
   UseGuards,
+  Delete,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -119,5 +121,26 @@ export class UserController {
     @Body() dto: RequestUpdateUserDto,
   ): Promise<void> {
     await this.userServicePort.updateUser(user_id, dto);
+  }
+
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
+  @ApiOperation({
+    summary: '회원 탈퇴 api',
+    description: '회원 탈퇴 api',
+  })
+  @ApiResponse({
+    status: 204,
+    description: '성공',
+    type: ResponseGetUserIdDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '실패(잘못된 요청)',
+  })
+  @HttpCode(204)
+  async deleteUser(@User() user_id: number): Promise<void> {
+    await this.userServicePort.deleteUser(user_id);
   }
 }

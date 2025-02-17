@@ -8,4 +8,5 @@ export abstract class UserRepositoryPort {
     options: FindOneOptions<UserEntity>,
   ) => Promise<ResponseUserFindOneDto>;
   save: (user: UserInterface) => Promise<void>;
+  delete: (user_id: number) => Promise<void>;
 }
