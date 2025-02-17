@@ -28,4 +28,8 @@ export class UserRepository implements UserRepositoryPort {
   async save(user: UserInterface): Promise<void> {
     await this.userRepository.save(user);
   }
+
+  async delete(user_id: number): Promise<void> {
+    await this.userRepository.softDelete(user_id); 
+  }
 }
