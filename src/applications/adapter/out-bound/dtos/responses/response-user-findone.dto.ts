@@ -59,8 +59,8 @@ export class ResponseUserFindOneDto {
   status?: string;
 
   @Expose()
-  ideal_type_age: string;
+  ideal_type_age?: string;
 
   @Expose()
-  ideal_type_distance: number;
+  ideal_type_distance?: number;
 }
