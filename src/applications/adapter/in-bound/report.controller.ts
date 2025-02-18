@@ -10,7 +10,6 @@ import { JwtExceptionFilter } from 'src/filters/jwt-exception.filter';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { RequestSaveReportDto } from './dtos/requests/request-save-report.dto';
 import { User } from 'src/decorators/user.decorator';
-import { ResponseSaveReport } from './dtos/responses/response-save-report.dto';
 
 @ApiTags('reports')
 @Controller('reports')
@@ -46,7 +45,7 @@ export class ReportController {
   async save(
     @User() user_id: number,
     @Body() dto: RequestSaveReportDto,
-  ): Promise<ResponseSaveReport> {
+  ): Promise<boolean> {
     return await this.reportServicePort.save(user_id, dto);
   }
 }
