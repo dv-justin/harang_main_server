@@ -7,7 +7,7 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import { FindOneOptions } from './interfaces/user-findone-options.interface';
 import { ResponseUserFindOneDto } from './dtos/responses/response-user-findone.dto';
-import { UserUpdateInterface } from 'src/applications/port/out-bound/interfaces/user-update.interface';
+import { UserUpdateInterface } from './interfaces/user-update.interface';
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {
@@ -35,5 +35,9 @@ export class UserRepository implements UserRepositoryPort {
     user: UserUpdateInterface,
   ): Promise<void> {
     await this.userRepository.update(options, user);
+  }
+
+  async delete(user_id: number): Promise<void> {
+    await this.userRepository.softDelete(user_id);
   }
 }

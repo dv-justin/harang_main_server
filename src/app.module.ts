@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TieModule } from './modules/tie.module';
 import { HomeModule } from './modules/home.module';
 import { StorageModule } from './modules/storage.module';
+import { ReportModule } from './modules/report.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { StorageModule } from './modules/storage.module';
     TieModule,
     HomeModule,
     StorageModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [],
