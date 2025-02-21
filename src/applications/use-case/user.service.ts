@@ -251,11 +251,10 @@ export class UserService implements UserServicePort {
     user_id: number,
     dto: RequestUpdateIdealTypeDto,
   ): Promise<ResponseUpdateIdealTypeDto> {
-    const where = { id: user_id };
-    await this.userRepositoryPort.update(where, dto);
+    await this.userRepositoryPort.update({ id: user_id }, dto);
 
     const ideal = await this.userRepositoryPort.findOne({
-      where,
+      where: { id: user_id },
       select: ['ideal_type_age', 'ideal_type_distance'],
     });
 
@@ -264,7 +263,7 @@ export class UserService implements UserServicePort {
       idealTypeDistance: ideal?.ideal_type_distance,
     };
   }
-  
+
   async getIdealType(user_id: number): Promise<ResponseGetIdealTypeDto> {
     const result = await this.userRepositoryPort.findOne({
       where: { id: user_id },
