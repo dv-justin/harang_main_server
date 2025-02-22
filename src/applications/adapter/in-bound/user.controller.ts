@@ -33,28 +33,6 @@ import { ResponseGetIdealTypeDto } from './dtos/responses/response-get-ideal-typ
 export class UserController {
   constructor(private readonly userServicePort: UserServicePort) {}
 
-  @Get('idealType')
-  @UseGuards(JwtAuthGuard)
-  @UseFilters(JwtExceptionFilter)
-  @ApiOperation({
-    summary: '이상형 조회 api',
-    description: '이상형 조회 api',
-  })
-  @ApiResponse({
-    status: 200,
-    description: '성공',
-    type: ResponseGetIdealTypeDto,
-  })
-  @ApiResponse({
-    status: 400,
-    description: '실패(잘못된 요청)',
-  })
-  async getIdealType(
-    @User() user_id: number,
-  ): Promise<ResponseGetIdealTypeDto> {
-    return await this.userServicePort.getIdealType(user_id);
-  }
-
   @Get('/:user_id')
   @UseGuards(JwtAuthGuard)
   @UseFilters(JwtExceptionFilter)
@@ -125,7 +103,29 @@ export class UserController {
     await this.userServicePort.updateUser(user_id, dto);
   }
 
-  @Patch('idealType')
+  @Get('ideal-type')
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
+  @ApiOperation({
+    summary: '이상형 조회 api',
+    description: '이상형 조회 api',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '성공',
+    type: ResponseGetIdealTypeDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '실패(잘못된 요청)',
+  })
+  async getIdealType(
+    @User() user_id: number,
+  ): Promise<ResponseGetIdealTypeDto> {
+    return await this.userServicePort.getIdealType(user_id);
+  }
+
+  @Patch('ideal-type')
   @UseGuards(JwtAuthGuard)
   @UseFilters(JwtExceptionFilter)
   @ApiOperation({
