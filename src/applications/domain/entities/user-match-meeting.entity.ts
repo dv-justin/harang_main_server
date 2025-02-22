@@ -30,20 +30,20 @@ export class UserMatchMeetingEntity {
   @Column({ type: 'tinyint' })
   meeting_status: number;
 
-  @Column({ type: 'tinyint' })
-  man_user_ticket_used: number;
+  @Column({ type: 'boolean' })
+  man_user_ticket_used: boolean;
 
-  @Column({ type: 'tinyint' })
-  female_user_ticket_used: number;
+  @Column({ type: 'boolean' })
+  female_user_ticket_used: boolean;
 
-  @Column({ type: 'tinyint' })
-  man_user_after: number;
+  @Column({ type: 'boolean' })
+  man_user_after: boolean;
 
-  @Column({ type: 'tinyint' })
-  female_user_after: number;
+  @Column({ type: 'boolean' })
+  female_user_after: boolean;
 
-  @Column({ type: 'tinyint' })
-  is_failed: number;
+  @Column({ type: 'boolean' })
+  is_failed: boolean;
 
   @Column({ length: 10, default: null })
   all_tickets_used_by: string;
@@ -57,7 +57,7 @@ export class UserMatchMeetingEntity {
   @Column({ length: 255, default: null })
   meeting_schedule: string;
 
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'boolean' })
   is_accept: number;
 
   @CreateDateColumn({ name: 'created_at' })

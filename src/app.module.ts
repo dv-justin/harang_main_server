@@ -36,9 +36,6 @@ import { ReportModule } from './modules/report.module';
         entities: [__dirname + '/applications/domain/**/*.entity.{js,ts}'],
         synchronize: false,
         keepConnectionAlive: true,
-        extra: {
-          connectionLimit: 10,
-        },
       }),
     }),
     UserModule,

@@ -176,9 +176,8 @@ export class UserService implements UserServicePort {
   ): Promise<ResponseGetUserPhoneNumberDto> {
     const user = await this.userRepositoryPort.findOne({
       where: { phone_number: phone_number },
-      select: ['phone_number', 'id'],
+      select: ['id', 'phone_number'],
     });
-
     if (user) {
       const tokens = await this.authServicePort.generateTokens(user?.id);
       const return_user = { status: user?.status, ...tokens };

@@ -1,15 +1,15 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class ResponseGetTieMatchStatusDto {
-  @IsNumber()
+  @IsBoolean()
   @IsNotEmpty()
-  man_user_ticket_used: number;
+  man_user_ticket_used: boolean;
 
   @IsString()
   @IsNotEmpty()
   all_tickets_used_by: string;
 
-  @IsNumber()
+  @IsBoolean()
   @IsNotEmpty()
-  female_user_ticket_used: number;
+  female_user_ticket_used: boolean;
 }

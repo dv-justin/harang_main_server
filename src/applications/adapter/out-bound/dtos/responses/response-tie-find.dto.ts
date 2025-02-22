@@ -1,4 +1,5 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 
 export class UserDto {
   @Expose()
@@ -22,43 +23,69 @@ export class UserDto {
 
 export class ResponseTieFindDto {
   @Expose()
+  @IsOptional()
   id: number;
 
   @Expose()
+  @IsOptional()
   @Type(() => UserDto)
-  man_user: UserDto;
+  man_user?: UserDto;
 
   @Expose()
+  @IsOptional()
   @Type(() => UserDto)
-  female_user: UserDto;
+  female_user?: UserDto;
 
   @Expose()
-  meeting_status: number;
+  @IsOptional()
+  meeting_status?: number;
 
   @Expose()
-  meeting_location: string;
+  @IsOptional()
+  meeting_location?: string;
 
   @Expose()
-  meeting_address: string;
+  @IsOptional()
+  meeting_address?: string;
 
   @Expose()
-  meeting_schedule: string;
+  @IsOptional()
+  meeting_schedule?: string;
 
   @Expose()
-  created_at: string;
+  @IsOptional()
+  created_at?: string;
 
   @Expose()
-  updated_at: string;
+  @IsOptional()
+  updated_at?: string;
 
   @Expose()
-  deleted_at: string | null;
+  @IsOptional()
+  deleted_at?: string | null;
 
   @Expose()
-  man_user_ticket_used: boolean;
+  @IsOptional()
+  @Transform(({ value }) => !!value)
+  man_user_ticket_used?: boolean;
 
   @Expose()
-  female_user_ticket_used: boolean;
+  @IsOptional()
+  @Transform(({ value }) => !!value)
+  female_user_ticket_used?: boolean;
 
   @Expose()
-  is_failed: boolean;
+  @IsOptional()
+  @Transform(({ value }) => !!value)
+  man_user_after?: boolean;
+
+  @Expose()
+  @IsOptional()
+  @Transform(({ value }) => !!value)
+  female_user_after?: boolean;
+
+  @Expose()
+  @IsOptional()
+  @Transform(({ value }) => !!value)
+  is_failed?: boolean;
 }
