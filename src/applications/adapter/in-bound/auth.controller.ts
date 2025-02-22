@@ -13,7 +13,7 @@ export class AuthController {
     private readonly userServicePort: UserServicePort,
   ) {}
 
-  @Get('/phone-number/:phone_number')
+  @Get('/phone-number/:phone-number')
   @ApiOperation({
     summary: '회원 휴대폰 번호 조회 api',
     description: '회원 휴대폰 번호 조회 api',
@@ -28,13 +28,13 @@ export class AuthController {
     description: '실패(잘못된 요청)',
   })
   async login(
-    @Param('phone_number') phone_number: string,
+    @Param('phone-number') phone_number: string,
   ): Promise<ResponseLoginDto> {
     const user = await this.authServicePort.login(phone_number);
     return user;
   }
 
-  @Get('/:refresh_token')
+  @Get('/:refresh-token')
   @ApiOperation({
     summary: '엑세스토큰 재발급',
     description: '엑세스토큰 재발급',
@@ -42,14 +42,13 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: '성공',
-    // type: ResponseGetUserPhoneNumberDto,
   })
   @ApiResponse({
     status: 400,
     description: '실패(잘못된 요청)',
   })
   async refreshAccessToken(
-    @Param('refresh_token') refresh_token: string,
+    @Param('refresh-token') refresh_token: string,
   ): Promise<any> {
     return await this.authServicePort.refreshAccessToken(refresh_token);
   }

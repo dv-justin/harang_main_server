@@ -49,7 +49,7 @@ export class TieController {
 
   @UseGuards(JwtAuthGuard)
   @UseFilters(JwtExceptionFilter)
-  @Get('/:tie_id')
+  @Get('/:tie-id')
   @ApiOperation({
     summary: '인연 조회 api',
     description: '인연 조회 api',
@@ -63,13 +63,13 @@ export class TieController {
     status: 400,
     description: '실패(잘못된 요청)',
   })
-  async getTie(@Param('tie_id') tie_id: number): Promise<ResponseGetTieDto> {
+  async getTie(@Param('tie-id') tie_id: number): Promise<ResponseGetTieDto> {
     return await this.tieServicePort.getTie(tie_id);
   }
 
   @UseGuards(JwtAuthGuard)
   @UseFilters(JwtExceptionFilter)
-  @Patch('/:tie_id/after')
+  @Patch('/:tie-id/after')
   @ApiOperation({
     summary: '애프터 신청 api',
     description: '애프터 신청 api',
@@ -84,7 +84,7 @@ export class TieController {
   })
   async updateAfter(
     @User() user_id: number,
-    @Param('tie_id') tie_id: number,
+    @Param('tie-id') tie_id: number,
     @Body() dto: RequestUpdateAfterDto,
   ): Promise<boolean> {
     await this.tieServicePort.updateAfter(user_id, tie_id, dto);
