@@ -8,6 +8,7 @@ import { ResponseTieFindDto } from './dtos/responses/response-tie-find.dto';
 import { FindOptions } from './interfaces/tie-find-options.interface';
 import { FindOneOptions } from './interfaces/tie-findone-options.interface';
 import { ResponseTieFindOneDto } from './dtos/responses/response-tie-findone.dto';
+import { PatchInterface } from './interfaces/tie-patch.interface';
 
 @Injectable()
 export class TieRepository implements TieRepositoryPort {
@@ -44,5 +45,9 @@ export class TieRepository implements TieRepositoryPort {
     });
 
     return tie_dto;
+  }
+
+  async patch(id: number, options: PatchInterface): Promise<void> {
+    await this.userMatchMeetingRepository.update(id, options);
   }
 }

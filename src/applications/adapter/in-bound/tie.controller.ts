@@ -1,4 +1,12 @@
-import { Controller, Get, Param, UseFilters, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  UseFilters,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -11,6 +19,7 @@ import { TieServicePort } from 'src/applications/port/in-bound/tie.service.port'
 import { JwtExceptionFilter } from 'src/filters/jwt-exception.filter';
 import { ResponseGetTiesDto } from './dtos/responses/response-get-ties.dto';
 import { ResponseGetTieDto } from './dtos/responses/response-get-tie.dto';
+import { RequestUpdateAfterDto } from './dtos/requests/request-update-after.dto';
 
 @ApiTags('ties')
 @Controller('ties')
@@ -56,5 +65,29 @@ export class TieController {
   })
   async getTie(@Param('tie_id') tie_id: number): Promise<ResponseGetTieDto> {
     return await this.tieServicePort.getTie(tie_id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
+  @Patch('/:tie_id/after')
+  @ApiOperation({
+    summary: '애프터 신청 api',
+    description: '애프터 신청 api',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '성공',
+  })
+  @ApiResponse({
+    status: 400,
+    description: '실패(잘못된 요청)',
+  })
+  async updateAfter(
+    @User() user_id: number,
+    @Param('tie_id') tie_id: number,
+    @Body() dto: RequestUpdateAfterDto,
+  ): Promise<boolean> {
+    await this.tieServicePort.updateAfter(user_id, tie_id, dto);
+    return true;
   }
 }
