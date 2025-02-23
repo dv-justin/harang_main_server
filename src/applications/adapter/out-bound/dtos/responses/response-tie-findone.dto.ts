@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 
 export class ResponseTieFindOneDto {
   @Expose()
@@ -14,10 +14,12 @@ export class ResponseTieFindOneDto {
   meeting_schedule: string;
 
   @Expose()
-  man_user_ticket_used: number;
+  @Transform(({ value }) => !!value)
+  man_user_ticket_used: boolean;
 
   @Expose()
-  female_user_ticket_used: number;
+  @Transform(({ value }) => !!value)
+  female_user_ticket_used: boolean;
 
   @Expose()
   all_tickets_used_by: string;

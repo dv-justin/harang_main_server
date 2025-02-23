@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
-export class ResponseUpdateIdealTypeDto {
+export class ResponseGetIdealTypeDto {
   @IsNotEmpty()
   @IsString()
   idealTypeAge: string;

@@ -7,6 +7,8 @@ import {
   Patch,
   UseFilters,
   UseGuards,
+  Delete,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -25,6 +27,7 @@ import { RequestUpdateIdealTypeDto } from './dtos/requests/request-update-ideal-
 import { ResponseUpdateIdealTypeDto } from './dtos/responses/response-update-ideal-type.dto';
 import { RequestUpdateProfileDto } from './dtos/requests/request-update-profile.dto';
 import { ResponseUpdateProfileDto } from './dtos/responses/response-update-user-profile.dto';
+import { ResponseGetIdealTypeDto } from './dtos/responses/response-get-ideal-type.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -102,7 +105,29 @@ export class UserController {
     await this.userServicePort.updateUser(user_id, dto);
   }
 
-  @Patch('idealType')
+  @Get('ideal-type')
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
+  @ApiOperation({
+    summary: '이상형 조회 api',
+    description: '이상형 조회 api',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '성공',
+    type: ResponseGetIdealTypeDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '실패(잘못된 요청)',
+  })
+  async getIdealType(
+    @User() user_id: number,
+  ): Promise<ResponseGetIdealTypeDto> {
+    return await this.userServicePort.getIdealType(user_id);
+  }
+
+  @Patch('ideal-type')
   @UseGuards(JwtAuthGuard)
   @UseFilters(JwtExceptionFilter)
   @ApiOperation({
@@ -113,10 +138,6 @@ export class UserController {
     status: 200,
     description: '성공',
     type: ResponseUpdateIdealTypeDto,
-  })
-  @ApiResponse({
-    status: 400,
-    description: '실패(잘못된 요청)',
   })
   async updateIdealType(
     @User() user_id: number,
@@ -146,5 +167,26 @@ export class UserController {
     @Body() dto: RequestUpdateProfileDto,
   ): Promise<ResponseUpdateProfileDto> {
     return await this.userServicePort.updateProfile(user_id, dto);
+  }
+
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  @UseFilters(JwtExceptionFilter)
+  @ApiOperation({
+    summary: '회원 탈퇴 api',
+    description: '회원 탈퇴 api',
+  })
+  @ApiResponse({
+    status: 204,
+    description: '성공',
+    type: ResponseGetUserIdDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '실패(잘못된 요청)',
+  })
+  @HttpCode(204)
+  async deleteUser(@User() user_id: number): Promise<void> {
+    await this.userServicePort.deleteUser(user_id);
   }
 }

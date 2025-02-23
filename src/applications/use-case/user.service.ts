@@ -13,8 +13,9 @@ import { RequestUpdateIdealTypeDto } from '../adapter/in-bound/dtos/requests/req
 import { ResponseUpdateIdealTypeDto } from './dtos/responses/response-update-ideal-type.dto';
 import { RequestUpdateProfileDto } from '../adapter/in-bound/dtos/requests/request-update-profile.dto';
 import { ResponseUpdateProfileDto } from './dtos/responses/response-update-profile.dto';
-import { UserUpdateInterface } from '../port/out-bound/interfaces/user-update.interface';
+import { UserUpdateInterface } from '../adapter/out-bound/interfaces/user-update.interface';
 import { StorageServicePort } from '../port/in-bound/storage.service.port';
+import { ResponseGetIdealTypeDto } from './dtos/responses/response-get-ideal-type.dto';
 
 @Injectable()
 export class UserService implements UserServicePort {
@@ -180,9 +181,8 @@ export class UserService implements UserServicePort {
   ): Promise<ResponseGetUserPhoneNumberDto> {
     const user = await this.userRepositoryPort.findOne({
       where: { phone_number: phone_number },
-      select: ['phone_number'],
+      select: ['id', 'phone_number'],
     });
-
     if (user) {
       const tokens = await this.authServicePort.generateTokens(user?.id);
       const return_user = { status: user?.status, ...tokens };
@@ -255,17 +255,16 @@ export class UserService implements UserServicePort {
     user_id: number,
     dto: RequestUpdateIdealTypeDto,
   ): Promise<ResponseUpdateIdealTypeDto> {
-    const where = { id: user_id };
-    await this.userRepositoryPort.update(where, dto);
+    await this.userRepositoryPort.update({ id: user_id }, dto);
 
     const ideal = await this.userRepositoryPort.findOne({
-      where,
+      where: { id: user_id },
       select: ['ideal_type_age', 'ideal_type_distance'],
     });
 
     return {
-      ideal_type_age: ideal.ideal_type_age,
-      ideal_type_distance: ideal.ideal_type_distance,
+      idealTypeAge: ideal?.ideal_type_age,
+      idealTypeDistance: ideal?.ideal_type_distance,
     };
   }
 
@@ -331,5 +330,21 @@ export class UserService implements UserServicePort {
       merit: user.merit,
       profile_image: user.profile_image,
     };
+  }
+
+  async getIdealType(user_id: number): Promise<ResponseGetIdealTypeDto> {
+    const result = await this.userRepositoryPort.findOne({
+      where: { id: user_id },
+      select: ['ideal_type_age', 'ideal_type_distance'],
+    });
+
+    return {
+      idealTypeAge: result?.ideal_type_age,
+      idealTypeDistance: result?.ideal_type_distance,
+    };
+  }
+
+  async deleteUser(user_id: number): Promise<void> {
+    await this.userRepositoryPort.delete(user_id);
   }
 }
