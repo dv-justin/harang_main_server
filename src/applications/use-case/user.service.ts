@@ -281,6 +281,10 @@ export class UserService implements UserServicePort {
       const update_image = { file_urls: [...urls, ...update_url.file_urls] };
 
       update_data.profile_image = update_image;
+    } else if (profile_image?.urls.length) {
+      const update_image = { file_urls: profile_image.urls };
+
+      update_data.profile_image = update_image;
     }
 
     await this.userRepositoryPort.update({ id: user_id }, update_data);
