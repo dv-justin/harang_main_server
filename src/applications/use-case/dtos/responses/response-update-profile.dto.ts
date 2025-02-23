@@ -19,43 +19,43 @@ export class ResponseUpdateProfileDto {
 
   @IsNotEmpty()
   @IsString()
-  phone_number: string;
+  phoneNumber: string;
 
   @IsNotEmpty()
   @IsString()
-  region_level1: string;
+  regionLevel1: string;
 
   @IsNotEmpty()
   @IsString()
-  region_level2: string;
+  regionLevel2: string;
 
   @IsNotEmpty()
   @IsString()
-  church_name: string;
+  churchName: string;
 
   @IsNotEmpty()
   @IsString()
-  pastor_name: string;
+  pastorName: string;
 
   @IsNotEmpty()
   @IsString()
-  school_and_major: string;
+  schoolAndMajor: string;
 
   @IsNotEmpty()
   @IsString()
-  company_name: string;
+  companyName: string;
 
   @IsNotEmpty()
   @IsString()
-  your_faith: string;
+  yourFaith: string;
 
   @IsNotEmpty()
   @IsString()
-  influential_verse: string;
+  influentialVerse: string;
 
   @IsNotEmpty()
   @IsString()
-  prayer_topic: string;
+  prayerTopic: string;
 
   @IsNotEmpty()
   @IsString()
@@ -63,11 +63,11 @@ export class ResponseUpdateProfileDto {
 
   @IsNotEmpty()
   @IsString()
-  couple_activity: string;
+  coupleActivity: string;
 
   @IsNotEmpty()
   @IsString()
-  expected_meeting: string;
+  expectedMeeting: string;
 
   @IsNotEmpty()
   @IsString()
@@ -75,5 +75,5 @@ export class ResponseUpdateProfileDto {
 
   @IsNotEmpty()
   @IsObject()
-  profile_image:Record<string, any>;
+  profileImage:Record<string, any>;
 }
