@@ -6,6 +6,7 @@ export interface FindOptions<T> {
     female_user?: {
       id: number;
     };
+    is_failed?: boolean;
   };
   select?: (keyof T)[];
 }

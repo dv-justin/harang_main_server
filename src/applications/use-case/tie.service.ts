@@ -25,10 +25,13 @@ export class TieService implements TieServicePort {
     const user = await this.userServicePort.getUserId(user_id, false);
 
     const ties = await this.tieRepositoryPort.find({
-      where:
-        user?.gender === 'man'
+      where: {
+        ...(user?.gender === 'man'
           ? { man_user: { id: user_id } }
-          : { female_user: { id: user_id } },
+          : { female_user: { id: user_id } }),
+        is_failed: false,
+      },
+
       select: [
         'id',
         'man_user',
@@ -186,11 +189,18 @@ export class TieService implements TieServicePort {
     tie_id: number,
     dto: RequestUpdateAfterDto,
   ) {
+    let data: PatchInterface;
     const { user_after } = dto;
     const user = await this.userServicePort.getUserId(user_id, false);
-    const data = this.mapUserAfterByGender(user?.gender, user_after);
 
-    await this.tieRepositoryPort.patch(tie_id, data);
+    if (user_after) {
+      data = this.mapUserAfterByGender(user?.gender, user_after);
+    }
+
+    await this.tieRepositoryPort.patch(
+      tie_id,
+      user_after ? data : { is_failed: true },
+    );
   }
 
   private getLatestMatchWithin24Hours(
