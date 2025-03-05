@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { RequestSaveUserDto } from 'src/applications/adapter/in-bound/dtos/requests/request-save-user.dto';
 import { UserServicePort } from '../port/in-bound/user.service.port';
-import { UserRepositoryPort } from '../port/out-bound/user.repository.port';
+import { UserRepositoryPort } from '../port/out-bound/repositories/user.repository.port';
 import { AuthServicePort } from '../port/in-bound/auth.service.port';
 import { ResponseGetUserIdDto } from './dtos/responses/response-get-user-id.dto';
 import { ResponseGetUserPhoneNumberDto } from './dtos/responses/response-get-user-phone-number.dto';

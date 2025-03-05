@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { TieRepositoryPort } from '../port/out-bound/tie.repository.port';
+import { TieRepositoryPort } from '../port/out-bound/repositories/tie.repository.port';
 import { TieServicePort } from '../port/in-bound/tie.service.port';
 import { UserServicePort } from '../port/in-bound/user.service.port';
 import { ResponseGetTiesForDirectDto } from './dtos/responses/response-get-ties-for-direct.dto';
@@ -9,6 +9,7 @@ import { ResponseGetTieDto } from './dtos/responses/response-get-tie.dto';
 import { ResponseGetTiesForHomeDto } from './dtos/responses/response-get-ties-for-home.dto';
 import { RequestUpdateAfterDto } from '../adapter/in-bound/dtos/requests/request-update-after.dto';
 import { PatchInterface } from '../adapter/out-bound/interfaces/tie-patch.interface';
+import { NotificationServicePort } from '../port/in-bound/notification.service.port';
 
 @Injectable()
 export class TieService implements TieServicePort {
@@ -17,6 +18,7 @@ export class TieService implements TieServicePort {
 
     @Inject(forwardRef(() => UserServicePort))
     private readonly userServicePort: UserServicePort,
+    private readonly notificationServicePort: NotificationServicePort,
   ) {}
 
   async getTiesForDirect(
@@ -201,6 +203,8 @@ export class TieService implements TieServicePort {
       tie_id,
       user_after ? data : { is_failed: true },
     );
+
+    await this.notificationServicePort.saveNotification();
   }
 
   private getLatestMatchWithin24Hours(

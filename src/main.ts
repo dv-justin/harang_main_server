@@ -24,8 +24,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('My API Docs')
-    .setDescription('API documentation for my application')
+    .setTitle('Harang Main Server')
+    .setDescription('API documentation for Harang Main Server')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
