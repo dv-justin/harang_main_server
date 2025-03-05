@@ -11,6 +11,10 @@ import { UserStatus } from '../domain/enums/user-status.enum';
 import { TieServicePort } from '../port/in-bound/tie.service.port';
 import { RequestUpdateIdealTypeDto } from '../adapter/in-bound/dtos/requests/request-update-ideal-type.dto';
 import { ResponseUpdateIdealTypeDto } from './dtos/responses/response-update-ideal-type.dto';
+import { RequestUpdateProfileDto } from '../adapter/in-bound/dtos/requests/request-update-profile.dto';
+import { ResponseUpdateProfileDto } from './dtos/responses/response-update-profile.dto';
+import { UserUpdateInterface } from '../adapter/out-bound/interfaces/user-update.interface';
+import { StorageServicePort } from '../port/in-bound/storage.service.port';
 import { ResponseGetIdealTypeDto } from './dtos/responses/response-get-ideal-type.dto';
 
 @Injectable()
@@ -19,6 +23,7 @@ export class UserService implements UserServicePort {
     @Inject(forwardRef(() => UserRepositoryPort))
     private readonly userRepositoryPort: UserRepositoryPort,
     private readonly authServicePort: AuthServicePort,
+    private readonly storageServicePort: StorageServicePort,
 
     @Inject(forwardRef(() => TieServicePort))
     private readonly tieServicePort: TieServicePort,
@@ -260,6 +265,74 @@ export class UserService implements UserServicePort {
     return {
       idealTypeAge: ideal?.ideal_type_age,
       idealTypeDistance: ideal?.ideal_type_distance,
+    };
+  }
+
+  async updateProfile(
+    user_id: number,
+    dto: RequestUpdateProfileDto,
+  ): Promise<ResponseUpdateProfileDto> {
+    const { profile_image, ...rest } = dto;
+    const update_data: UserUpdateInterface = { ...rest };
+
+    if (profile_image?.temp_urls.length) {
+      const { urls, temp_urls } = profile_image;
+      const update_url = await this.storageServicePort.moveFile(temp_urls);
+      const update_image = { file_urls: [...urls, ...update_url.file_urls] };
+
+      update_data.profile_image = update_image;
+    } else if (profile_image?.urls.length) {
+      const update_image = { file_urls: profile_image.urls };
+
+      update_data.profile_image = update_image;
+    }
+
+    await this.userRepositoryPort.update({ id: user_id }, update_data);
+    const user = await this.userRepositoryPort.findOne({
+      where: { id: user_id },
+      select: [
+        'id',
+        'name',
+        'gender',
+        'birthdate',
+        'phone_number',
+        'region_level1',
+        'region_level2',
+        'church_name',
+        'pastor_name',
+        'school_and_major',
+        'company_name',
+        'your_faith',
+        'influential_verse',
+        'prayer_topic',
+        'vision',
+        'couple_activity',
+        'expected_meeting',
+        'merit',
+        'profile_image',
+      ],
+    });
+
+    return {
+      id: user.id,
+      name: user.name,
+      gender: user.gender,
+      birthdate: user.birthdate,
+      phoneNumber: user.phone_number,
+      regionLevel1: user.region_level1,
+      regionLevel2: user.region_level2,
+      churchName: user.church_name,
+      pastorName: user.pastor_name,
+      schoolAndMajor: user.school_and_major,
+      companyName: user.company_name,
+      yourFaith: user.your_faith,
+      influentialVerse: user.influential_verse,
+      prayerTopic: user.prayer_topic,
+      vision: user.vision,
+      coupleActivity: user.couple_activity,
+      expectedMeeting: user.expected_meeting,
+      merit: user.merit,
+      profileImage: user.profile_image,
     };
   }
 

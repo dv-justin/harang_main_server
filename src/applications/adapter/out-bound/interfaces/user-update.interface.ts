@@ -21,5 +21,5 @@ export interface UserUpdateInterface {
   status?: UserStatus;
   ideal_type_age?: string;
   ideal_type_distance?: number;
-  profile_image?: string[];
+  profile_image?: object;
 }

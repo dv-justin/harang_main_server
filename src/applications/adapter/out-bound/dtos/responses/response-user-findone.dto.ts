@@ -63,4 +63,7 @@ export class ResponseUserFindOneDto {
 
   @Expose()
   ideal_type_distance?: number;
+
+  @Expose()
+  profile_image?: object;
 }
