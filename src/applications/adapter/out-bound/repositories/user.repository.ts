@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/applications/domain/entities/user.entity';
 import { UserInterface } from 'src/applications/port/out-bound/interfaces/user.interface';
-import { UserRepositoryPort } from 'src/applications/port/out-bound/user.repository.port';
+import { UserRepositoryPort } from 'src/applications/port/out-bound/repositories/user.repository.port';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
-import { FindOneOptions } from './interfaces/user-findone-options.interface';
-import { ResponseUserFindOneDto } from './dtos/responses/response-user-findone.dto';
-import { UserUpdateInterface } from './interfaces/user-update.interface';
+import { FindOneOptions } from '../interfaces/user-findone-options.interface';
+import { ResponseUserFindOneDto } from '../dtos/responses/response-user-findone.dto';
+import { UserUpdateInterface } from '../interfaces/user-update.interface';
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {

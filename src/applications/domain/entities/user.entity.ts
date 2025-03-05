@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { UserStatus } from '../enums/user-status.enum';
 import { UserMatchMeetingEntity } from './user-match-meeting.entity';
+import { NotificationEntity } from './notification.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -92,4 +93,7 @@ export class UserEntity {
 
   @OneToMany(() => UserMatchMeetingEntity, (meeting) => meeting.female_user)
   match_meetings_female: UserMatchMeetingEntity[];
+
+  @OneToMany(() => NotificationEntity, (notification) => notification.user)
+  notification: NotificationEntity;
 }

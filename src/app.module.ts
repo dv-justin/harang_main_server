@@ -9,6 +9,7 @@ import { TieModule } from './modules/tie.module';
 import { HomeModule } from './modules/home.module';
 import { StorageModule } from './modules/storage.module';
 import { ReportModule } from './modules/report.module';
+import { NotificationModule } from './modules/notification.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { ReportModule } from './modules/report.module';
     HomeModule,
     StorageModule,
     ReportModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [],

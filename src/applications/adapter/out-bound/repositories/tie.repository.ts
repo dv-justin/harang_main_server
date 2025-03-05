@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
-import { TieRepositoryPort } from 'src/applications/port/out-bound/tie.repository.port';
+import { TieRepositoryPort } from 'src/applications/port/out-bound/repositories/tie.repository.port';
 import { UserMatchMeetingEntity } from 'src/applications/domain/entities/user-match-meeting.entity';
-import { ResponseTieFindDto } from './dtos/responses/response-tie-find.dto';
-import { FindOptions } from './interfaces/tie-find-options.interface';
-import { FindOneOptions } from './interfaces/tie-findone-options.interface';
-import { ResponseTieFindOneDto } from './dtos/responses/response-tie-findone.dto';
-import { PatchInterface } from './interfaces/tie-patch.interface';
+import { ResponseTieFindDto } from '../dtos/responses/response-tie-find.dto';
+import { FindOptions } from '../interfaces/tie-find-options.interface';
+import { FindOneOptions } from '../interfaces/tie-findone-options.interface';
+import { ResponseTieFindOneDto } from '../dtos/responses/response-tie-findone.dto';
+import { PatchInterface } from '../interfaces/tie-patch.interface';
 
 @Injectable()
 export class TieRepository implements TieRepositoryPort {
