@@ -35,6 +35,10 @@ export class RequestSaveUserDto {
 
   @IsNotEmpty()
   @IsString()
+  church_region_name: string;
+
+  @IsNotEmpty()
+  @IsString()
   school_and_major: string;
 
   @IsOptional()
@@ -68,6 +72,10 @@ export class RequestSaveUserDto {
   @IsNotEmpty()
   @IsString()
   merit: string;
+
+  @IsNotEmpty()
+  @IsString()
+  mbti: string;
 
   @IsNotEmpty()
   @IsString()

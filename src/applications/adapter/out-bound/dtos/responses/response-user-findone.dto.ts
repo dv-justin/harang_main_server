@@ -29,6 +29,9 @@ export class ResponseUserFindOneDto {
   pastor_name?: string;
 
   @Expose()
+  church_region_name?: string;
+
+  @Expose()
   school_and_major?: string;
 
   @Expose()
@@ -54,6 +57,9 @@ export class ResponseUserFindOneDto {
 
   @Expose()
   merit?: string;
+
+  @Expose()
+  mbti?: string;
 
   @Expose()
   status?: string;

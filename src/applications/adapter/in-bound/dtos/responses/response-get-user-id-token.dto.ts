@@ -43,6 +43,10 @@ export class ResponseGetUserIdTokenDto {
 
   @IsOptional()
   @IsString()
+  churchRegionName?: string;
+
+  @IsOptional()
+  @IsString()
   schoolAndMajor?: string;
 
   @IsOptional()
@@ -76,4 +80,8 @@ export class ResponseGetUserIdTokenDto {
   @IsOptional()
   @IsString()
   merit?: string;
+
+  @IsOptional()
+  @IsString()
+  mbti?: string;
 }

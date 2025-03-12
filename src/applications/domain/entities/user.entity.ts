@@ -41,6 +41,9 @@ export class UserEntity {
   pastor_name: string;
 
   @Column({ length: 255 })
+  church_region_name: string;
+
+  @Column({ length: 255 })
   school_and_major: string;
 
   @Column({ length: 255, nullable: true })
@@ -66,6 +69,9 @@ export class UserEntity {
 
   @Column({ type: 'text' })
   merit: string;
+
+  @Column({ length: 255 })
+  mbti: string;
 
   @Column({ type: 'json' })
   profile_image: any;
