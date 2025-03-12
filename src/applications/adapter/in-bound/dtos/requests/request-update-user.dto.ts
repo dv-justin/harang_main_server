@@ -35,6 +35,10 @@ export class RequestUpdateUserDto {
 
   @IsNotEmpty()
   @IsString()
+  church_region_name: string;
+
+  @IsNotEmpty()
+  @IsString()
   school_and_major: string;
 
   @IsOptional()
@@ -68,4 +72,8 @@ export class RequestUpdateUserDto {
   @IsNotEmpty()
   @IsString()
   merit: string;
+
+  @IsNotEmpty()
+  @IsString()
+  mbti: string;
 }

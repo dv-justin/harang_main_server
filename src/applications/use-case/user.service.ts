@@ -39,6 +39,7 @@ export class UserService implements UserServicePort {
       region_level2: regionLevel2,
       church_name: churchName,
       pastor_name: pastorName,
+      church_region_name: churchRegionName,
       school_and_major: schoolAndMajor,
       company_name: companyName,
       your_faith: yourFaith,
@@ -48,6 +49,7 @@ export class UserService implements UserServicePort {
       couple_activity: coupleActivity,
       expected_meeting: expectedMeeting,
       merit: merit,
+      mbti: mbti,
     } = await this.userRepositoryPort.findOne({
       where: { id: user_id },
       select: [
@@ -70,6 +72,7 @@ export class UserService implements UserServicePort {
         'couple_activity',
         'expected_meeting',
         'merit',
+        'mbti',
       ],
     });
 
@@ -87,6 +90,7 @@ export class UserService implements UserServicePort {
       regionLevel2,
       churchName,
       pastorName,
+      churchRegionName,
       schoolAndMajor,
       companyName,
       yourFaith,
@@ -96,6 +100,7 @@ export class UserService implements UserServicePort {
       coupleActivity,
       expectedMeeting,
       merit,
+      mbti,
       manUserTicketUsed: tie?.man_user_ticket_used,
       femaleUserTicketUsed: tie?.female_user_ticket_used,
       allTicketsUsedBy: tie?.all_tickets_used_by,
@@ -114,6 +119,7 @@ export class UserService implements UserServicePort {
       region_level2: regionLevel2,
       church_name: churchName,
       pastor_name: pastorName,
+      church_region_name: churchRegionName,
       school_and_major: schoolAndMajor,
       company_name: companyName,
       your_faith: yourFaith,
@@ -123,6 +129,7 @@ export class UserService implements UserServicePort {
       couple_activity: coupleActivity,
       expected_meeting: expectedMeeting,
       merit: merit,
+      mbti: mbti,
     } = await this.userRepositoryPort.findOne({
       where: { id: user_id },
       select: [
@@ -136,6 +143,7 @@ export class UserService implements UserServicePort {
         'region_level2',
         'church_name',
         'pastor_name',
+        'church_region_name',
         'school_and_major',
         'company_name',
         'your_faith',
@@ -145,6 +153,7 @@ export class UserService implements UserServicePort {
         'couple_activity',
         'expected_meeting',
         'merit',
+        'mbti',
       ],
     });
 
@@ -159,6 +168,7 @@ export class UserService implements UserServicePort {
       regionLevel2,
       churchName,
       pastorName,
+      churchRegionName,
       schoolAndMajor,
       companyName,
       yourFaith,
@@ -168,6 +178,7 @@ export class UserService implements UserServicePort {
       coupleActivity,
       expectedMeeting,
       merit,
+      mbti,
     };
   }
 
@@ -212,6 +223,7 @@ export class UserService implements UserServicePort {
       region_level2,
       church_name,
       pastor_name,
+      church_region_name,
       school_and_major,
       company_name,
       your_faith,
@@ -221,6 +233,7 @@ export class UserService implements UserServicePort {
       couple_activity,
       expected_meeting,
       merit,
+      mbti,
     } = dto;
 
     const user = {
@@ -233,6 +246,7 @@ export class UserService implements UserServicePort {
       region_level2,
       church_name,
       pastor_name,
+      church_region_name,
       school_and_major,
       company_name,
       your_faith,
@@ -242,6 +256,7 @@ export class UserService implements UserServicePort {
       couple_activity,
       expected_meeting,
       merit,
+      mbti,
     };
     await this.userRepositoryPort.save({ ...user, status: UserStatus.PENDING });
   }

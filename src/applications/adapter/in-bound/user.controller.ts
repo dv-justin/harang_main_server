@@ -54,7 +54,6 @@ export class UserController {
     @Query('include_match') include_match: boolean,
   ): Promise<ResponseGetUserIdDto> {
     const user = await this.userServicePort.getUserId(user_id, include_match);
-
     return user;
   }
 
