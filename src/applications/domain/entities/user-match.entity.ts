@@ -10,8 +10,8 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 
-@Entity('user_match_meetings')
-export class UserMatchMeetingEntity {
+@Entity('user_matchs')
+export class UserMatchEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -37,28 +37,10 @@ export class UserMatchMeetingEntity {
   female_user_ticket_used: boolean;
 
   @Column({ type: 'boolean' })
-  man_user_after: boolean;
-
-  @Column({ type: 'boolean' })
-  female_user_after: boolean;
-
-  @Column({ type: 'boolean' })
   is_failed: boolean;
 
-  @Column({ length: 10, default: null })
-  all_tickets_used_by: string;
-
-  @Column({ length: 255, default: null })
-  meeting_location: string;
-
-  @Column({ length: 255, default: null })
-  meeting_address: string;
-
-  @Column({ length: 255, default: null })
-  meeting_schedule: string;
-
-  @Column({ type: 'boolean' })
-  is_accept: number;
+  @Column({ type: 'tinyint' })
+  all_tickets_used_by: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

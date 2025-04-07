@@ -8,12 +8,15 @@ import { plainToInstance } from 'class-transformer';
 import { FindOneOptions } from '../interfaces/user-findone-options.interface';
 import { ResponseUserFindOneDto } from '../dtos/responses/response-user-findone.dto';
 import { UserUpdateInterface } from '../interfaces/user-update.interface';
+import { UserPointEntity } from 'src/applications/domain/entities/user-points.entity';
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserPointEntity)
+    private readonly userPointRepository: Repository<UserPointEntity>,
   ) {}
 
   async findOne(
@@ -27,7 +30,11 @@ export class UserRepository implements UserRepositoryPort {
   }
 
   async save(user: UserInterface): Promise<void> {
-    await this.userRepository.save(user);
+    const user_data = await this.userRepository.save(user);
+    await this.userPointRepository.save({
+      user: { id: user_data?.id },
+      point: 0,
+    });
   }
 
   async update(

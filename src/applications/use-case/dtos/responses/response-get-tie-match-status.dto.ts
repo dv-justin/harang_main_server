@@ -7,7 +7,7 @@ export class ResponseGetTieMatchStatusDto {
 
   @IsString()
   @IsNotEmpty()
-  all_tickets_used_by: string;
+  all_tickets_used_by: boolean;
 
   @IsBoolean()
   @IsNotEmpty()

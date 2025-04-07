@@ -8,10 +8,4 @@ export abstract class TieServicePort {
   getTiesForDirect: (user_id: number) => Promise<ResponseGetTiesForDirectDto[]>;
   getTiesForHome: (user_id: number) => Promise<ResponseGetTiesForHomeDto>;
   getTieMatchStatus: (user_id: number) => Promise<ResponseGetTieMatchStatusDto>;
-  getTie: (tie_id: number) => Promise<ResponseGetTieDto>;
-  updateAfter: (
-    user_id: number,
-    tie_id: number,
-    dto: RequestUpdateAfterDto,
-  ) => Promise<void>;
 }

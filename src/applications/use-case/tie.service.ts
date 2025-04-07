@@ -8,7 +8,6 @@ import { ResponseGetTieMatchStatusDto } from './dtos/responses/response-get-tie-
 import { ResponseGetTieDto } from './dtos/responses/response-get-tie.dto';
 import { ResponseGetTiesForHomeDto } from './dtos/responses/response-get-ties-for-home.dto';
 import { RequestUpdateAfterDto } from '../adapter/in-bound/dtos/requests/request-update-after.dto';
-import { PatchInterface } from '../adapter/out-bound/interfaces/tie-patch.interface';
 import { NotificationServicePort } from '../port/in-bound/notification.service.port';
 
 @Injectable()
@@ -42,14 +41,18 @@ export class TieService implements TieServicePort {
         'is_failed',
         'man_user_ticket_used',
         'female_user_ticket_used',
-        'man_user_after',
-        'female_user_after',
+        'all_tickets_used_by',
       ],
     });
-
+    console.log('ties', ties);
     return ties
       .filter((tie) => {
-        return tie.meeting_status;
+        return (
+          tie.meeting_status === 1 &&
+          ((tie?.man_user_ticket_used && !tie?.female_user_ticket_used) ||
+            (!tie?.man_user_ticket_used && tie?.female_user_ticket_used) ||
+            (tie?.man_user_ticket_used && tie?.female_user_ticket_used))
+        );
       })
       .map(
         (tie: {
@@ -66,8 +69,7 @@ export class TieService implements TieServicePort {
           is_failed?: boolean;
           man_user_ticket_used?: boolean;
           female_user_ticket_used?: boolean;
-          man_user_after?: boolean;
-          female_user_after?: boolean;
+          all_tickets_used_by?: boolean;
         }) => {
           return {
             id: tie?.id,
@@ -76,18 +78,17 @@ export class TieService implements TieServicePort {
                 ? tie?.female_user?.name
                 : tie?.man_user?.name,
             meetingStatus: tie?.meeting_status,
+            yourUserId:
+              user?.gender === 'man' ? tie?.female_user?.id : tie?.man_user?.id,
             isMyTicket:
               user?.gender === 'man'
                 ? tie?.man_user_ticket_used
                 : tie?.female_user_ticket_used,
-            isMyAfter:
-              user?.gender === 'man'
-                ? tie?.man_user_after
-                : tie?.female_user_after,
-            isYourAfter:
-              user?.gender === 'man'
-                ? tie?.female_user_after
-                : tie?.man_user_after,
+            isYourTicket:
+              user?.gender === 'female'
+                ? tie?.man_user_ticket_used
+                : tie?.female_user_ticket_used,
+            allTicketsUsedBy: tie?.all_tickets_used_by,
           };
         },
       );
@@ -103,22 +104,11 @@ export class TieService implements TieServicePort {
       select: ['man_user', 'female_user'],
     });
 
-    const meeting_info_list = ties
-      ?.filter((tie) => tie?.meeting_status === 2)
-      ?.map((tie) => {
-        const { meeting_location, meeting_address, meeting_schedule } = tie;
-        return {
-          meetingLocation: meeting_location,
-          meetingAddress: meeting_address,
-          meetingSchedule: meeting_schedule,
-        };
-      });
-
     const matchs = ties?.filter((tie) => {
       return !tie?.meeting_status;
     });
 
-    const latest_match = this.getLatestMatchWithin24Hours(matchs);
+    const latest_match = this.getLatestMatchWithin48Hours(matchs);
 
     const match_user =
       user?.gender === 'man'
@@ -133,7 +123,6 @@ export class TieService implements TieServicePort {
       : null;
 
     return {
-      meetingInfoList: meeting_info_list,
       id,
       name,
       gender,
@@ -171,47 +160,11 @@ export class TieService implements TieServicePort {
     };
   }
 
-  async getTie(tie_id: number): Promise<ResponseGetTieDto> {
-    const tie = await this.tieRepositoryPort.findOne({
-      where: { id: tie_id },
-      select: ['meeting_address', 'meeting_location', 'meeting_schedule'],
-    });
-
-    const {
-      meeting_address: meetingAddress,
-      meeting_location: meetingLocation,
-      meeting_schedule: meetingSchedule,
-    } = tie;
-
-    return { meetingAddress, meetingLocation, meetingSchedule };
-  }
-
-  async updateAfter(
-    user_id: number,
-    tie_id: number,
-    dto: RequestUpdateAfterDto,
-  ) {
-    let data: PatchInterface;
-    const { user_after } = dto;
-    const user = await this.userServicePort.getUserId(user_id, false);
-
-    if (user_after) {
-      data = this.mapUserAfterByGender(user?.gender, user_after);
-    }
-
-    await this.tieRepositoryPort.patch(
-      tie_id,
-      user_after ? data : { is_failed: true },
-    );
-
-    await this.notificationServicePort.saveNotification();
-  }
-
-  private getLatestMatchWithin24Hours(
+  private getLatestMatchWithin48Hours(
     matchs: ResponseTieFindDto[],
   ): ResponseTieFindDto {
     const now = new Date().getTime();
-    const twenty_four_hours_ago = new Date(now - 24 * 60 * 60 * 1000);
+    const twenty_four_hours_ago = new Date(now - 24 * 60 * 60 * 1000 * 2);
     const latest_matchs = matchs?.filter((tie) => {
       return new Date(tie.created_at) >= twenty_four_hours_ago;
     });
@@ -222,17 +175,5 @@ export class TieService implements TieServicePort {
     )[0];
 
     return latest_match;
-  }
-
-  private mapUserAfterByGender(
-    gender: string,
-    user_after: boolean,
-  ): PatchInterface {
-    if (gender === 'man') {
-      return { man_user_after: user_after };
-    }
-    if (gender === 'female') {
-      return { female_user_after: user_after };
-    }
   }
 }

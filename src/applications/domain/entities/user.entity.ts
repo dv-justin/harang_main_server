@@ -6,10 +6,12 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { UserStatus } from '../enums/user-status.enum';
-import { UserMatchMeetingEntity } from './user-match-meeting.entity';
+import { UserMatchEntity } from './user-match.entity';
 import { NotificationEntity } from './notification.entity';
+import { UserPointEntity } from './user-points.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -94,12 +96,15 @@ export class UserEntity {
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deleted_at?: Date;
 
-  @OneToMany(() => UserMatchMeetingEntity, (meeting) => meeting.man_user)
-  match_meetings_man: UserMatchMeetingEntity[];
+  @OneToMany(() => UserMatchEntity, (matchs) => matchs.man_user)
+  match_meetings_man: UserMatchEntity[];
 
-  @OneToMany(() => UserMatchMeetingEntity, (meeting) => meeting.female_user)
-  match_meetings_female: UserMatchMeetingEntity[];
+  @OneToMany(() => UserMatchEntity, (matchs) => matchs.female_user)
+  match_meetings_female: UserMatchEntity[];
 
   @OneToMany(() => NotificationEntity, (notification) => notification.user)
   notification: NotificationEntity;
+
+  @OneToOne(() => UserPointEntity, (user_point) => user_point.user)
+  user_point: UserPointEntity;
 }

@@ -8,12 +8,13 @@ import { UserRepositoryPort } from 'src/applications/port/out-bound/repositories
 import { UserService } from 'src/applications/use-case/user.service';
 import { AuthModule } from './auth.module';
 import { TieModule } from './tie.module';
+import { UserPointEntity } from 'src/applications/domain/entities/user-points.entity';
 
 @Module({
   imports: [
     forwardRef(() => AuthModule),
     forwardRef(() => TieModule),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity, UserPointEntity]),
   ],
   controllers: [UserController],
   providers: [

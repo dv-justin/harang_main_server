@@ -97,5 +97,5 @@ export class ResponseGetUserIdDto {
 
   @IsOptional()
   @IsString()
-  allTicketsUsedBy?: string;
+  allTicketsUsedBy?: boolean;
 }
