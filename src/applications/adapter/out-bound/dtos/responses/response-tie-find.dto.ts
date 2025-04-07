@@ -46,10 +46,6 @@ export class ResponseTieFindDto {
 
   @Expose()
   @IsOptional()
-  meeting_address?: string;
-
-  @Expose()
-  @IsOptional()
   meeting_schedule?: string;
 
   @Expose()
@@ -77,15 +73,14 @@ export class ResponseTieFindDto {
   @Expose()
   @IsOptional()
   @Transform(({ value }) => !!value)
-  man_user_after?: boolean;
-
-  @Expose()
-  @IsOptional()
-  @Transform(({ value }) => !!value)
   female_user_after?: boolean;
 
   @Expose()
   @IsOptional()
   @Transform(({ value }) => !!value)
   is_failed?: boolean;
+
+  @Expose()
+  @IsOptional()
+  all_tickets_used_by?: boolean;
 }

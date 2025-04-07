@@ -1,26 +1,6 @@
-import { IsArray, IsString, IsNotEmpty, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-
-class MeetingInfo {
-  @IsNotEmpty()
-  @IsString()
-  meetingLocation: string;
-
-  @IsNotEmpty()
-  @IsString()
-  meetingAddress: string;
-
-  @IsNotEmpty()
-  @IsString()
-  meetingSchedule: string;
-}
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class ResponseGetHomeDto {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => MeetingInfo)
-  meetingInfoList: MeetingInfo[];
-
   @IsNotEmpty()
   @IsString()
   id: number;

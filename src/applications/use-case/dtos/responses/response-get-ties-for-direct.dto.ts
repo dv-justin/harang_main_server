@@ -13,7 +13,19 @@ export class ResponseGetTiesForDirectDto {
   @IsNotEmpty()
   meetingStatus: number;
 
+  @IsInt()
+  @IsNotEmpty()
+  yourUserId: number;
+
   @IsBoolean()
   @IsNotEmpty()
   isMyTicket: boolean;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  isYourTicket: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  allTicketsUsedBy: boolean;
 }

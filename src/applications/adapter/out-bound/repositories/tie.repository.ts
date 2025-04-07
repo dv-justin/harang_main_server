@@ -3,22 +3,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import { TieRepositoryPort } from 'src/applications/port/out-bound/repositories/tie.repository.port';
-import { UserMatchMeetingEntity } from 'src/applications/domain/entities/user-match-meeting.entity';
+import { UserMatchEntity } from 'src/applications/domain/entities/user-match.entity';
 import { ResponseTieFindDto } from '../dtos/responses/response-tie-find.dto';
 import { FindOptions } from '../interfaces/tie-find-options.interface';
 import { FindOneOptions } from '../interfaces/tie-findone-options.interface';
 import { ResponseTieFindOneDto } from '../dtos/responses/response-tie-findone.dto';
-import { PatchInterface } from '../interfaces/tie-patch.interface';
 
 @Injectable()
 export class TieRepository implements TieRepositoryPort {
   constructor(
-    @InjectRepository(UserMatchMeetingEntity)
-    private readonly userMatchMeetingRepository: Repository<UserMatchMeetingEntity>,
+    @InjectRepository(UserMatchEntity)
+    private readonly userMatchMeetingRepository: Repository<UserMatchEntity>,
   ) {}
 
   async find(
-    options: FindOptions<UserMatchMeetingEntity>,
+    options: FindOptions<UserMatchEntity>,
   ): Promise<ResponseTieFindDto[]> {
     const ties_entity = await this.userMatchMeetingRepository.find({
       ...options,
@@ -36,7 +35,7 @@ export class TieRepository implements TieRepositoryPort {
   }
 
   async findOne(
-    options: FindOneOptions<UserMatchMeetingEntity>,
+    options: FindOneOptions<UserMatchEntity>,
   ): Promise<ResponseTieFindOneDto> {
     const tie_entity = await this.userMatchMeetingRepository.findOne(options);
 
@@ -45,9 +44,5 @@ export class TieRepository implements TieRepositoryPort {
     });
 
     return tie_dto;
-  }
-
-  async patch(id: number, options: PatchInterface): Promise<void> {
-    await this.userMatchMeetingRepository.update(id, options);
   }
 }
